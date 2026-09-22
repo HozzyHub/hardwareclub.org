@@ -1,0 +1,37 @@
+{
+  "name": "hardwareclub",
+  "private": true,
+  "version": "1.0.0",
+  "description": "hardwareclub.org — Cloudflare Worker + static site",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "wrangler dev",
+    "test": "vitest run",
+    "check": "npm run check:types && npm run check:html && npm run check:links",
+    "check:types": "tsc --noEmit",
+    "check:html": "html-validate \"public/*.html\"",
+    "check:links": "node scripts/check-links.mjs",
+    "build": "node scripts/build-og.mjs",
+    "deploy": "wrangler deploy"
+  },
+  "devDependencies": {
+    "@cloudflare/vitest-pool-workers": "^0.22.0",
+    "@resvg/resvg-js": "^2.6.2",
+    "@types/node": "^26.6.2",
+    "html-validate": "^11.16.0",
+    "mimetext": "^3.0.28",
+    "typescript": "^7.0.2",
+    "vitest": "^4.1.11",
+    "wrangler": "^4.136.3"
+  },
+  "allowScripts": {
+    "core-js-pure@3.50.0": true,
+    "esbuild@0.28.1": true,
+    "workerd@1.20260815.1": true,
+    "workerd@1.20260921.1": true,
+    "fsevents@2.3.3": true
+  }
+}
