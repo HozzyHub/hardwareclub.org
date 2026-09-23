@@ -508,6 +508,11 @@ a:focus-visible {
   margin: 0;
 }
 
+.checkbox-single + .field-error,
+.cf-turnstile + .field-error {
+  margin-top: -0.75rem;
+}
+
 .checkbox-grid,
 .radio-grid {
   display: grid;

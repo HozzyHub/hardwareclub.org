@@ -45,8 +45,10 @@ Before the first real deploy is useful in production:
    - `npx wrangler secret put TURNSTILE_SECRET` with the real secret key.
    - Update `vars.TURNSTILE_SITEKEY` in `wrangler.jsonc` to the real site key.
 2. Enable Email Routing on the `hardwareclub.org` zone and verify
-   `randalwadejr@gmail.com` as a destination address (the `NOTIFY` binding's
-   `destination_address`).
+   `randalwadejr@gmail.com` as a destination address. That address appears
+   twice in `wrangler.jsonc` (`vars.NOTIFY_TO`, which the Worker sends to, and
+   the `NOTIFY` binding's `destination_address`, which is the only recipient
+   the binding allows); change both together.
 3. Apply the D1 migration to the remote database:
    `npx wrangler d1 migrations apply hardwareclub-submissions --remote`.
 4. Deploy once (`npx wrangler deploy` or a Workers Builds run) — this creates

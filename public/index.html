@@ -227,8 +227,6 @@
       <p class="honesty">Hardware Club is an independent project run by a small group of hardware enthusiasts in Metro Detroit who don't want good hardware ending up in a landfill. It isn't a registered nonprofit and donations aren't tax-deductible. What you get instead is a straight answer about where your hardware goes.</p>
 
       <form id="donate-form" class="donate-form" method="post" action="/api/submit" novalidate>
-        <div id="form-status" class="form-status" role="alert" hidden></div>
-
         <div class="field">
           <label for="field-name">Name</label>
           <input type="text" id="field-name" name="name" maxlength="120" required autocomplete="name">
@@ -314,6 +312,7 @@
         </div>
 
         <div class="form-submit">
+          <div id="form-status" class="form-status" role="alert" tabindex="-1" hidden></div>
           <button type="submit" class="btn btn-primary">Send</button>
           <p class="hint">We reply within 2 days from hello@hardwareclub.org.</p>
         </div>

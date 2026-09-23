@@ -7,6 +7,11 @@
   var submitBtn = form.querySelector('button[type="submit"]');
   var statusBox = document.getElementById("form-status");
 
+  var errorAnchors = {
+    categories: '[name="categories[]"]',
+    turnstile: ".cf-turnstile",
+  };
+
   function clearErrors() {
     var errors = form.querySelectorAll(".field-error");
     for (var i = 0; i < errors.length; i++) {
@@ -20,20 +25,45 @@
     statusBox.textContent = "";
   }
 
+  function showStatus(message) {
+    statusBox.hidden = false;
+    statusBox.dataset.state = "error";
+    statusBox.textContent = message;
+  }
+
   function showFieldError(name, message) {
-    var field = form.querySelector('[name="' + name + '"]');
-    if (!field) {
-      statusBox.hidden = false;
-      statusBox.dataset.state = "error";
-      statusBox.textContent = message;
+    var anchor = form.querySelector(errorAnchors[name] || '[name="' + name + '"]');
+    if (!anchor) {
+      showStatus(message);
       return;
     }
-    field.setAttribute("aria-invalid", "true");
-    var container = field.closest(".field") || field.parentElement;
+
     var p = document.createElement("p");
     p.className = "field-error";
+    p.tabIndex = -1;
     p.textContent = message;
-    container.appendChild(p);
+
+    if (anchor.matches("input, select, textarea")) {
+      var controls = form.querySelectorAll('[name="' + anchor.name + '"]');
+      for (var i = 0; i < controls.length; i++) {
+        controls[i].setAttribute("aria-invalid", "true");
+      }
+      var container = anchor.closest("fieldset, .field");
+      if (container) {
+        container.appendChild(p);
+        return;
+      }
+      anchor = anchor.closest("label") || anchor;
+    }
+    anchor.insertAdjacentElement("afterend", p);
+  }
+
+  function focusFirstError() {
+    var target =
+      form.querySelector('[aria-invalid="true"]') ||
+      form.querySelector(".field-error") ||
+      (statusBox.hidden ? null : statusBox);
+    if (target) target.focus();
   }
 
   function resetTurnstile() {
@@ -79,22 +109,16 @@
           for (var i = 0; i < fields.length; i++) {
             showFieldError(fields[i], result.data.errors[fields[i]]);
           }
-          var firstField = form.querySelector('[aria-invalid="true"]');
-          if (firstField) firstField.focus();
         } else {
-          statusBox.hidden = false;
-          statusBox.dataset.state = "error";
-          statusBox.textContent =
-            "Something went wrong sending that. Please try again.";
+          showStatus("Something went wrong sending that. Please try again.");
         }
+        focusFirstError();
       })
       .catch(function () {
         submitBtn.disabled = false;
         resetTurnstile();
-        statusBox.hidden = false;
-        statusBox.dataset.state = "error";
-        statusBox.textContent =
-          "Something went wrong sending that. Please try again.";
+        showStatus("Something went wrong sending that. Please try again.");
+        focusFirstError();
       });
   });
 })();
