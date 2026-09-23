@@ -10,15 +10,20 @@ async function verifyWithCloudflare(token: string, secret: string, ip: string | 
   body.set("response", token);
   if (ip) body.set("remoteip", ip);
 
-  const res = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
-    method: "POST",
-    body,
-  });
+  try {
+    const res = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
+      method: "POST",
+      body,
+    });
 
-  if (!res.ok) return false;
+    if (!res.ok) return false;
 
-  const data = (await res.json()) as { success?: boolean };
-  return data.success === true;
+    const data = (await res.json()) as { success?: boolean } | null;
+    return data?.success === true;
+  } catch (err) {
+    console.error("Turnstile siteverify request failed", err);
+    return false;
+  }
 }
 
 /**

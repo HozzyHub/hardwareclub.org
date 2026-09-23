@@ -35,6 +35,15 @@ async function submissionRows() {
   return result.results as Array<Record<string, unknown>>;
 }
 
+async function withoutSubmissionsTable(run: () => Promise<void>) {
+  await env.DB.exec("ALTER TABLE submissions RENAME TO submissions_unavailable");
+  try {
+    await run();
+  } finally {
+    await env.DB.exec("ALTER TABLE submissions_unavailable RENAME TO submissions");
+  }
+}
+
 beforeEach(() => {
   turnstile.verify = async () => true;
   notifier.send = vi.fn().mockResolvedValue(undefined);
@@ -232,6 +241,43 @@ describe("POST /api/submit", () => {
     expect(response.status).toBe(200);
     expect(await response.json()).toEqual({ ok: true });
     expect(await submissionRows()).toHaveLength(1);
+  });
+
+  it("returns the site's own HTML error page when storing the submission fails on the no-JS path", async () => {
+    await withoutSubmissionsTable(async () => {
+      const body = buildFormBody();
+
+      const response = await SELF.fetch("https://hardwareclub.org/api/submit", {
+        method: "POST",
+        headers: { "content-type": "application/x-www-form-urlencoded" },
+        body: body.toString(),
+      });
+
+      expect(response.status).toBe(500);
+      expect(response.headers.get("content-type")).toContain("text/html");
+      const html = await response.text();
+      expect(html).toContain("There was a problem with your submission");
+      expect(html).toContain('href="/#donate"');
+      expect(notifier.send).not.toHaveBeenCalled();
+    });
+  });
+
+  it("returns a form-level JSON error when storing the submission fails on the JS path", async () => {
+    await withoutSubmissionsTable(async () => {
+      const body = buildFormBody();
+
+      const response = await SELF.fetch("https://hardwareclub.org/api/submit", {
+        method: "POST",
+        headers: { "content-type": "application/x-www-form-urlencoded", accept: "application/json" },
+        body: body.toString(),
+      });
+
+      expect(response.status).toBe(500);
+      const data = (await response.json()) as { ok: boolean; errors: Record<string, string> };
+      expect(data.ok).toBe(false);
+      expect(data.errors.form).toBeTruthy();
+      expect(notifier.send).not.toHaveBeenCalled();
+    });
   });
 
   it("rejects oversized bodies with 413", async () => {

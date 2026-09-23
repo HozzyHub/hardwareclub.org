@@ -83,29 +83,34 @@ export async function handleSubmit(request: Request, env: Env): Promise<Response
   const country = (request.cf as { country?: string } | undefined)?.country ?? null;
   const userAgent = (request.headers.get("user-agent") || "").slice(0, 200);
 
-  await env.DB.prepare(
-    `INSERT INTO submissions
-      (id, created_at, name, email, phone, location, categories, description, quantity, powers_on, handoff, drive_back, consent, country, user_agent)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-  )
-    .bind(
-      id,
-      createdAt,
-      data.name,
-      data.email,
-      data.phone,
-      data.location,
-      JSON.stringify(data.categories),
-      data.description,
-      data.quantity,
-      data.powers_on,
-      data.handoff,
-      data.drive_back ? 1 : 0,
-      data.consent ? 1 : 0,
-      country,
-      userAgent,
+  try {
+    await env.DB.prepare(
+      `INSERT INTO submissions
+        (id, created_at, name, email, phone, location, categories, description, quantity, powers_on, handoff, drive_back, consent, country, user_agent)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     )
-    .run();
+      .bind(
+        id,
+        createdAt,
+        data.name,
+        data.email,
+        data.phone,
+        data.location,
+        JSON.stringify(data.categories),
+        data.description,
+        data.quantity,
+        data.powers_on,
+        data.handoff,
+        data.drive_back ? 1 : 0,
+        data.consent ? 1 : 0,
+        country,
+        userAgent,
+      )
+      .run();
+  } catch (err) {
+    console.error("Failed to store donation submission", err);
+    return errorResponse({ form: "We couldn't save your submission. Please try again in a moment." }, 500, asJson);
+  }
 
   try {
     await notifier.send(env, data);
