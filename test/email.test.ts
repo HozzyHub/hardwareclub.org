@@ -36,8 +36,25 @@ describe("buildRawMessage", () => {
 
     expect(headers).toMatch(/^To: <maintainer@example\.org>\r?$/m);
     expect(headers).toMatch(/^From: .*<hello@hardwareclub\.org>\r?$/m);
-    expect(headers).toMatch(/^Reply-To: .*<zoe@example\.com>\r?$/m);
+    expect(headers).toMatch(/^Reply-To: <zoe@example\.com>\r?$/m);
     expect(headers).toMatch(/^Subject: =\?utf-8\?B\?/m);
+  });
+
+  it("keeps donor-supplied text out of the header block", () => {
+    const hostile: NormalizedSubmission = {
+      ...submission,
+      name: "x\r\nSubject: Action required\r\n\r\n<b>evil</b>",
+      location: "Detroit\r\nBcc: victim@example.com",
+    };
+    const raw = buildRawMessage("maintainer@example.org", hostile);
+    const { headers } = splitMessage(raw);
+    const lines = headers.split(/\r?\n/);
+
+    expect(lines.filter((line) => /^Subject:/.test(line))).toHaveLength(1);
+    expect(lines.some((line) => /^Bcc:/.test(line))).toBe(false);
+    expect(headers).not.toContain("evil");
+    expect(headers).toMatch(/^Reply-To: <zoe@example\.com>\r?$/m);
+    expect(lines.every((line) => /^[\x20-\x7E]*$/.test(line))).toBe(true);
   });
 
   it("base64-encodes the plain-text body so non-ASCII donor text survives intact", () => {

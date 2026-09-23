@@ -37,7 +37,7 @@ export function buildRawMessage(to: string, data: NormalizedSubmission): string 
   msg.setSender({ name: "Hardware Club", addr: FROM_ADDRESS });
   msg.setRecipient(to);
   msg.setSubject(formatSubject(data));
-  msg.setHeader("Reply-To", new Mailbox({ name: data.name, addr: data.email }));
+  msg.setHeader("Reply-To", new Mailbox({ addr: data.email }));
   msg.addMessage({
     contentType: "text/plain",
     encoding: "base64",
