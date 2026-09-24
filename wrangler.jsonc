@@ -11,7 +11,7 @@
     "directory": "./public",
     "binding": "ASSETS",
     "not_found_handling": "404-page",
-    "run_worker_first": ["/api/*", "/", "/index.html"]
+    "run_worker_first": true
   },
   "vars": {
     "TURNSTILE_SITEKEY": "1x00000000000000000000AA",

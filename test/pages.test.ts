@@ -11,6 +11,30 @@ describe("www redirect", () => {
     expect(response.status).toBe(301);
     expect(response.headers.get("location")).toBe("https://hardwareclub.org/privacy?ref=email");
   });
+
+  it.each(["/privacy", "/thanks", "/styles.css", "/og.png"])(
+    "301s www requests for the existing static path %s instead of serving the asset",
+    async (path) => {
+      const response = await SELF.fetch(`https://www.hardwareclub.org${path}`, { redirect: "manual" });
+
+      expect(response.status).toBe(301);
+      expect(response.headers.get("location")).toBe(`https://hardwareclub.org${path}`);
+    },
+  );
+});
+
+describe("static assets", () => {
+  it.each(["/privacy", "/thanks", "/styles.css", "/og.png"])(
+    "serves %s through the Worker with security headers",
+    async (path) => {
+      const response = await SELF.fetch(`https://hardwareclub.org${path}`);
+
+      expect(response.status).toBe(200);
+      expect(response.headers.get("x-frame-options")).toBe("DENY");
+      expect(response.headers.get("x-content-type-options")).toBe("nosniff");
+      expect(response.headers.get("content-security-policy")).toContain("challenges.cloudflare.com");
+    },
+  );
 });
 
 describe("GET /", () => {
