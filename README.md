@@ -3,9 +3,12 @@
 Source for hardwareclub.org: give old tech a second life. Metro Detroit.
 
 A static site (`public/`) served by a Cloudflare Worker (`src/`) with Workers
-Static Assets. The Worker injects the Turnstile site key into `/`, redirects
-`www` to the apex, and handles `POST /api/submit`, which validates a donation
-offer, stores it in D1, and emails the maintainer.
+Static Assets. The Worker runs first for every request (`run_worker_first` in
+`wrangler.jsonc`): it injects the Turnstile site key into `/`, redirects `www`
+to the apex, handles `POST /api/submit` (validates a donation offer, stores it
+in D1, and emails the maintainer), and sets the security headers from
+`src/security.ts` on every response, static assets included. There is no
+`public/_headers` file.
 
 ## Local development
 
@@ -53,7 +56,9 @@ Before the first real deploy is useful in production:
    `npx wrangler d1 migrations apply hardwareclub-submissions --remote`.
 4. Deploy once (`npx wrangler deploy` or a Workers Builds run) — this creates
    the `hardwareclub.org` and `www.hardwareclub.org` custom domains defined
-   under `routes` in `wrangler.jsonc`.
+   under `routes` in `wrangler.jsonc`. Those are the only hostnames the Worker
+   answers on: `workers_dev` and `preview_urls` are disabled because Turnstile
+   only renders on the widget's registered hostname.
 5. If the account has Cloudflare Access enabled, make sure the public
    hostname is excluded so visitors aren't asked to authenticate.
 
