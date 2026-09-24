@@ -34,6 +34,41 @@ export function wantsJson(request: Request): boolean {
   return accept.includes("application/json") || contentType.includes("application/json");
 }
 
+export class BodyTooLargeError extends Error {
+  constructor(maxBytes: number) {
+    super(`Request body exceeds ${maxBytes} bytes`);
+    this.name = "BodyTooLargeError";
+  }
+}
+
+export async function withBodyLimit(request: Request, maxBytes: number): Promise<Request> {
+  const contentLength = Number(request.headers.get("content-length"));
+  if (contentLength > maxBytes) {
+    throw new BodyTooLargeError(maxBytes);
+  }
+  if (request.body === null) {
+    return request;
+  }
+
+  const chunks: Uint8Array[] = [];
+  let total = 0;
+  for await (const chunk of request.body as ReadableStream<Uint8Array>) {
+    total += chunk.byteLength;
+    if (total > maxBytes) {
+      throw new BodyTooLargeError(maxBytes);
+    }
+    chunks.push(chunk);
+  }
+
+  const buffered = new Uint8Array(total);
+  let offset = 0;
+  for (const chunk of chunks) {
+    buffered.set(chunk, offset);
+    offset += chunk.byteLength;
+  }
+  return new Request(request.url, { method: request.method, headers: request.headers, body: buffered });
+}
+
 export async function parseBody(request: Request): Promise<RawSubmission> {
   const contentType = request.headers.get("content-type") || "";
 

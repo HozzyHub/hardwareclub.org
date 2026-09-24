@@ -1,4 +1,4 @@
-import { parseBody, wantsJson } from "./body";
+import { BodyTooLargeError, parseBody, wantsJson, withBodyLimit } from "./body";
 import { notifier } from "./email";
 import { turnstile } from "./turnstile";
 import { validateSubmission, type ValidationErrors } from "./validate";
@@ -49,15 +49,13 @@ function errorResponse(errors: ValidationErrors, status: number, asJson: boolean
 export async function handleSubmit(request: Request, env: Env): Promise<Response> {
   const asJson = wantsJson(request);
 
-  const contentLength = request.headers.get("content-length");
-  if (contentLength && Number(contentLength) > MAX_BODY_BYTES) {
-    return errorResponse({ form: "That submission is too large." }, 413, asJson);
-  }
-
   let raw;
   try {
-    raw = await parseBody(request);
-  } catch {
+    raw = await parseBody(await withBodyLimit(request, MAX_BODY_BYTES));
+  } catch (err) {
+    if (err instanceof BodyTooLargeError) {
+      return errorResponse({ form: "That submission is too large." }, 413, asJson);
+    }
     return errorResponse({ form: "We couldn't read that submission. Please try again." }, 400, asJson);
   }
 

@@ -280,6 +280,23 @@ describe("POST /api/submit", () => {
     });
   });
 
+  it("accepts the browser's multipart FormData submission", async () => {
+    const formData = new FormData();
+    for (const [key, value] of buildFormBody()) {
+      formData.append(key, value);
+    }
+
+    const response = await SELF.fetch("https://hardwareclub.org/api/submit", {
+      method: "POST",
+      headers: { accept: "application/json" },
+      body: formData,
+    });
+
+    expect(response.status).toBe(200);
+    expect(await response.json()).toEqual({ ok: true });
+    expect(await submissionRows()).toHaveLength(1);
+  });
+
   it("rejects oversized bodies with 413", async () => {
     const body = buildFormBody({ description: "x".repeat(20 * 1024) });
 
@@ -290,6 +307,28 @@ describe("POST /api/submit", () => {
     });
 
     expect(response.status).toBe(413);
+    expect(await submissionRows()).toHaveLength(0);
+  });
+
+  it("rejects oversized streamed bodies that carry no Content-Length with 413", async () => {
+    turnstile.verify = vi.fn().mockResolvedValue(true);
+    const chunk = new TextEncoder().encode(buildFormBody({ description: "x".repeat(4 * 1024) }).toString());
+    const request = new Request("https://hardwareclub.org/api/submit", {
+      method: "POST",
+      headers: { "content-type": "application/x-www-form-urlencoded", accept: "application/json" },
+      body: new ReadableStream<Uint8Array>({
+        start(controller) {
+          for (let i = 0; i < 8; i++) controller.enqueue(chunk);
+          controller.close();
+        },
+      }),
+    });
+    expect(request.headers.get("content-length")).toBeNull();
+
+    const response = await SELF.fetch(request);
+
+    expect(response.status).toBe(413);
+    expect(turnstile.verify).not.toHaveBeenCalled();
     expect(await submissionRows()).toHaveLength(0);
   });
 });
