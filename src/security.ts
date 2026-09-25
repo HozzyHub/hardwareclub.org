@@ -17,6 +17,9 @@ export function withSecurityHeaders(response: Response): Response {
   headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
   headers.set("Permissions-Policy", "camera=(), microphone=(), geolocation=()");
   headers.set("X-Frame-Options", "DENY");
+  // Browsers ignore HSTS on http:// and localhost responses, so this is safe
+  // to set unconditionally. includeSubDomains/preload are deliberately off.
+  headers.set("Strict-Transport-Security", "max-age=31536000");
 
   return new Response(response.body, {
     status: response.status,

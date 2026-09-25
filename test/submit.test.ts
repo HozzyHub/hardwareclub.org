@@ -129,6 +129,41 @@ describe("POST /api/submit", () => {
     expect(await submissionRows()).toHaveLength(0);
   });
 
+  // Each of these would otherwise reach the notification's Reply-To header.
+  it.each(["a<b>@c.de", 'x"y@c.de', "a,b@c.de", "a;b@c.de", "a:b@c.de", "a(b)@c.de", "a\\b@c.de", "a@[c].de"])(
+    "rejects the address-header-breaking email %s",
+    async (email) => {
+      const body = buildFormBody({ email });
+
+      const response = await SELF.fetch("https://hardwareclub.org/api/submit", {
+        method: "POST",
+        headers: { "content-type": "application/x-www-form-urlencoded", accept: "application/json" },
+        body: body.toString(),
+      });
+
+      expect(response.status).toBe(400);
+      const data = (await response.json()) as { errors: Record<string, string> };
+      expect(data.errors.email).toBeTruthy();
+      expect(await submissionRows()).toHaveLength(0);
+    },
+  );
+
+  it.each(["o'brien+donations@mail.example.co.uk", "first.last@example.com"])(
+    "accepts the ordinary email %s",
+    async (email) => {
+      const body = buildFormBody({ email });
+
+      const response = await SELF.fetch("https://hardwareclub.org/api/submit", {
+        method: "POST",
+        headers: { "content-type": "application/x-www-form-urlencoded", accept: "application/json" },
+        body: body.toString(),
+      });
+
+      expect(response.status).toBe(200);
+      expect((await submissionRows())[0]!.email).toBe(email);
+    },
+  );
+
   it("rejects an unknown category", async () => {
     const body = buildFormBody({}, ["not-a-real-category"]);
 

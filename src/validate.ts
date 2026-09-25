@@ -21,7 +21,9 @@ export type PowersOn = (typeof POWERS_ON_VALUES)[number];
 export const HANDOFF_VALUES = ["drop-off", "figure-it-out"] as const;
 export type Handoff = (typeof HANDOFF_VALUES)[number];
 
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+// Deliberately loose, but rejects characters that are special in RFC 5322
+// address headers so the notification's Reply-To can't be malformed.
+const EMAIL_RE = /^[^\s@<>()[\]\\,;:"]+@[^\s@<>()[\]\\,;:"]+\.[^\s@<>()[\]\\,;:"]+$/;
 const MAX_CATEGORIES = 8;
 
 export interface NormalizedSubmission {

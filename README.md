@@ -5,10 +5,10 @@ Source for hardwareclub.org: give old tech a second life. Metro Detroit.
 A static site (`public/`) served by a Cloudflare Worker (`src/`) with Workers
 Static Assets. The Worker runs first for every request (`run_worker_first` in
 `wrangler.jsonc`): it injects the Turnstile site key into `/`, redirects `www`
-to the apex, handles `POST /api/submit` (validates a donation offer, stores it
-in D1, and emails the maintainer), and sets the security headers from
-`src/security.ts` on every response, static assets included. There is no
-`public/_headers` file.
+and `http://` to the https apex, handles `POST /api/submit` (validates a
+donation offer, stores it in D1, and emails the maintainer), and sets the
+security headers from `src/security.ts` (including HSTS) on every response,
+static assets included. There is no `public/_headers` file.
 
 ## Local development
 
@@ -47,6 +47,9 @@ Before the first real deploy is useful in production:
    dashboard, then:
    - `npx wrangler secret put TURNSTILE_SECRET` with the real secret key.
    - Update `vars.TURNSTILE_SITEKEY` in `wrangler.jsonc` to the real site key.
+   - Until both are real, the Worker refuses donations on `hardwareclub.org`
+     with a logged 500 and `/api/health` returns 503: Cloudflare's test keys
+     are only accepted off the production host (local dev).
 2. Enable Email Routing on the `hardwareclub.org` zone and verify
    `randalwadejr@gmail.com` as a destination address. That address appears
    twice in `wrangler.jsonc` (`vars.NOTIFY_TO`, which the Worker sends to, and
@@ -68,7 +71,7 @@ Before the first real deploy is useful in production:
 - `src/` — the Worker: routing (`index.ts`), the submission handler
   (`submit.ts`, `body.ts`, `validate.ts`), Turnstile verification
   (`turnstile.ts`), email (`email.ts`), and shared concerns (`html.ts`,
-  `security.ts`).
+  `security.ts`, `site.ts`).
 - `migrations/` — D1 schema migrations.
 - `test/` — Vitest tests running against the real Workers runtime.
 - `scripts/` — `build-og.mjs` (OG image, part of `npm run build`) and
