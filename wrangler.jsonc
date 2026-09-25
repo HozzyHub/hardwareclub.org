@@ -34,6 +34,10 @@
       "destination_address": "randalwadejr@gmail.com"
     }
   ],
+  // `wrangler dev` otherwise rewrites local requests to the first route's
+  // host (http://hardwareclub.org), which the Worker treats as production:
+  // it would redirect to https and refuse the Turnstile test keys.
+  "dev": { "host": "localhost" },
   "routes": [
     { "pattern": "hardwareclub.org", "custom_domain": true },
     { "pattern": "www.hardwareclub.org", "custom_domain": true }

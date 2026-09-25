@@ -12,6 +12,13 @@ describe("www redirect", () => {
     expect(response.headers.get("location")).toBe("https://hardwareclub.org/privacy?ref=email");
   });
 
+  it("301s http://www to the https apex", async () => {
+    const response = await SELF.fetch("http://www.hardwareclub.org/privacy?ref=email", { redirect: "manual" });
+
+    expect(response.status).toBe(301);
+    expect(response.headers.get("location")).toBe("https://hardwareclub.org/privacy?ref=email");
+  });
+
   it.each(["/privacy", "/thanks", "/styles.css", "/og.png"])(
     "301s www requests for the existing static path %s instead of serving the asset",
     async (path) => {
@@ -21,6 +28,45 @@ describe("www redirect", () => {
       expect(response.headers.get("location")).toBe(`https://hardwareclub.org${path}`);
     },
   );
+});
+
+describe("HTTPS enforcement", () => {
+  it.each(["/", "/privacy?ref=email", "/api/health"])("301s http://hardwareclub.org%s to https", async (path) => {
+    const response = await SELF.fetch(`http://hardwareclub.org${path}`, { redirect: "manual" });
+
+    expect(response.status).toBe(301);
+    expect(response.headers.get("location")).toBe(`https://hardwareclub.org${path}`);
+  });
+
+  it("redirects a plaintext POST to /api/submit instead of handling it", async () => {
+    const response = await SELF.fetch("http://hardwareclub.org/api/submit", {
+      method: "POST",
+      headers: { "content-type": "application/x-www-form-urlencoded" },
+      body: "name=Jordan",
+      redirect: "manual",
+    });
+
+    expect(response.status).toBe(301);
+    expect(response.headers.get("location")).toBe("https://hardwareclub.org/api/submit");
+  });
+
+  it.each(["/", "/privacy", "/api/health", "/does-not-exist"])("sends HSTS on https %s", async (path) => {
+    const response = await SELF.fetch(`https://hardwareclub.org${path}`);
+
+    expect(response.headers.get("strict-transport-security")).toBe("max-age=31536000");
+  });
+
+  it("sends HSTS on the https www redirect", async () => {
+    const response = await SELF.fetch("https://www.hardwareclub.org/", { redirect: "manual" });
+
+    expect(response.headers.get("strict-transport-security")).toBe("max-age=31536000");
+  });
+
+  it("does not redirect plain http on non-production hosts such as wrangler dev", async () => {
+    const response = await SELF.fetch("http://localhost:8787/api/health", { redirect: "manual" });
+
+    expect(response.status).toBe(200);
+  });
 });
 
 describe("static assets", () => {
@@ -42,7 +88,7 @@ describe("GET /", () => {
     const response = await SELF.fetch("https://hardwareclub.org/");
     expect(response.status).toBe(200);
     const html = await response.text();
-    expect(html).toContain('data-sitekey="1x00000000000000000000AA"');
+    expect(html).toContain('data-sitekey="test-suite-sitekey"');
   });
 
   it("serves the page without cache validators so a site key change is never masked by a 304", async () => {

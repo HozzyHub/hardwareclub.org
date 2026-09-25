@@ -11,7 +11,14 @@ export default defineConfig({
       return {
         wrangler: { configPath: "./wrangler.jsonc" },
         miniflare: {
-          bindings: { TEST_MIGRATIONS: migrations },
+          bindings: {
+            TEST_MIGRATIONS: migrations,
+            // Tests request https://hardwareclub.org, where the Worker refuses
+            // Cloudflare's Turnstile test keys (src/turnstile.ts), so use
+            // production-shaped placeholders instead of the .dev.vars ones.
+            TURNSTILE_SITEKEY: "test-suite-sitekey",
+            TURNSTILE_SECRET: "test-suite-secret",
+          },
         },
       };
     }),

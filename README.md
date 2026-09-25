@@ -47,6 +47,9 @@ Before the first real deploy is useful in production:
    dashboard, then:
    - `npx wrangler secret put TURNSTILE_SECRET` with the real secret key.
    - Update `vars.TURNSTILE_SITEKEY` in `wrangler.jsonc` to the real site key.
+   - Until both are real, the Worker refuses donations on `hardwareclub.org`
+     with a logged 500 and `/api/health` returns 503: Cloudflare's test keys
+     are only accepted off the production host (local dev).
 2. Enable Email Routing on the `hardwareclub.org` zone and verify
    `randalwadejr@gmail.com` as a destination address. That address appears
    twice in `wrangler.jsonc` (`vars.NOTIFY_TO`, which the Worker sends to, and

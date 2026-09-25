@@ -1,9 +1,10 @@
 import { BodyTooLargeError, parseBody, wantsJson, withBodyLimit } from "./body";
 import { notifier } from "./email";
-import { turnstile } from "./turnstile";
+import { turnstile, TurnstileConfigError, turnstileConfigProblem } from "./turnstile";
 import { validateSubmission, type ValidationErrors } from "./validate";
 
 const MAX_BODY_BYTES = 16 * 1024;
+const FORM_UNAVAILABLE = "Sorry, our form isn't working right now. Please try again later.";
 
 function escapeHtml(value: string): string {
   return value
@@ -64,8 +65,23 @@ export async function handleSubmit(request: Request, env: Env): Promise<Response
     return successResponse(request, asJson);
   }
 
+  // A broken Turnstile setup would otherwise reject every donor as a bot and
+  // leave no trace, so report it as our failure and log it loudly.
+  const configProblem = turnstileConfigProblem(env, new URL(request.url).hostname);
+  if (configProblem) {
+    console.error(`Turnstile misconfigured: ${configProblem}`);
+    return errorResponse({ form: FORM_UNAVAILABLE }, 500, asJson);
+  }
+
   const ip = request.headers.get("cf-connecting-ip");
-  const verified = await turnstile.verify(raw.turnstileToken, env.TURNSTILE_SECRET, ip);
+  let verified: boolean;
+  try {
+    verified = await turnstile.verify(raw.turnstileToken, env.TURNSTILE_SECRET, ip);
+  } catch (err) {
+    if (!(err instanceof TurnstileConfigError)) throw err;
+    console.error(`Turnstile misconfigured: ${err.message}`);
+    return errorResponse({ form: FORM_UNAVAILABLE }, 500, asJson);
+  }
   if (!verified) {
     return errorResponse({ turnstile: "We couldn't verify you're human. Please try again." }, 400, asJson);
   }
