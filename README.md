@@ -120,8 +120,8 @@ Before the first real deploy is useful in production:
 - `public/` — static HTML/CSS/JS pages, fonts, and images.
 - `src/` — the Worker: routing (`index.ts`), the submission handler
   (`submit.ts`, `body.ts`, `validate.ts`), Turnstile verification
-  (`turnstile.ts`), email (`email.ts`), the scheduled retention purge
-  (`retention.ts`), and shared concerns (`html.ts`,
+  (`turnstile.ts`), email (`email.ts`), failure alerts (`failure-alert.ts`),
+  the scheduled retention purge (`retention.ts`), and shared concerns (`html.ts`,
   `security.ts`, `site.ts`).
 - `migrations/` — D1 schema migrations.
 - `test/` — Vitest tests running against the real Workers runtime.
