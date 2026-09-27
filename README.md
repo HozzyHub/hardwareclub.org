@@ -10,6 +10,8 @@ client IP via the `SUBMIT_RATE_LIMIT` binding in `wrangler.jsonc`, validates a
 donation offer, stores it in D1, and emails the maintainer), and sets the
 security headers from `src/security.ts` on every response, static assets
 included. HSTS is sent only on the apex. There is no `public/_headers` file.
+A monthly Cron Trigger also purges old submissions (see
+[Submission retention](#submission-retention)).
 
 ## Local development
 
@@ -90,7 +92,8 @@ Before the first real deploy is useful in production:
 - `public/` — static HTML/CSS/JS pages, fonts, and images.
 - `src/` — the Worker: routing (`index.ts`), the submission handler
   (`submit.ts`, `body.ts`, `validate.ts`), Turnstile verification
-  (`turnstile.ts`), email (`email.ts`), and shared concerns (`html.ts`,
+  (`turnstile.ts`), email (`email.ts`), the scheduled retention purge
+  (`retention.ts`), and shared concerns (`html.ts`,
   `security.ts`, `site.ts`).
 - `migrations/` — D1 schema migrations.
 - `test/` — Vitest tests running against the real Workers runtime.
