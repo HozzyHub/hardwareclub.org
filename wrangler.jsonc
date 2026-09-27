@@ -28,6 +28,13 @@
       "database_id": "58629061-650e-452e-9b94-4bdca497a8a8"
     }
   ],
+  "ratelimits": [
+    {
+      "name": "SUBMIT_RATE_LIMIT",
+      "namespace_id": "2026092701",
+      "simple": { "limit": 5, "period": 60 }
+    }
+  ],
   "send_email": [
     {
       "name": "NOTIFY",

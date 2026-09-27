@@ -1,6 +1,7 @@
 import { env, SELF } from "cloudflare:test";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { notifier } from "../src/email";
+import { handleSubmit, rateLimiter } from "../src/submit";
 import { turnstile } from "../src/turnstile";
 
 const VALID_FIELDS: Record<string, string> = {
@@ -47,6 +48,7 @@ async function withoutSubmissionsTable(run: () => Promise<void>) {
 beforeEach(() => {
   turnstile.verify = async () => true;
   notifier.send = vi.fn().mockResolvedValue(undefined);
+  rateLimiter.limit = vi.fn().mockResolvedValue({ success: true });
 });
 
 afterEach(async () => {
@@ -62,6 +64,87 @@ describe("GET /api/health", () => {
 });
 
 describe("POST /api/submit", () => {
+  it("allows a request and keys the limiter on CF-Connecting-IP", async () => {
+    const response = await SELF.fetch("https://hardwareclub.org/api/submit", {
+      method: "POST",
+      headers: {
+        "content-type": "application/x-www-form-urlencoded",
+        accept: "application/json",
+        "cf-connecting-ip": "192.0.2.10",
+      },
+      body: buildFormBody().toString(),
+    });
+
+    expect(response.status).toBe(200);
+    expect(rateLimiter.limit).toHaveBeenCalledTimes(1);
+    expect(vi.mocked(rateLimiter.limit).mock.calls[0]![0] === env.SUBMIT_RATE_LIMIT).toBe(true);
+    expect(vi.mocked(rateLimiter.limit).mock.calls[0]![1]).toBe("192.0.2.10");
+    expect(await submissionRows()).toHaveLength(1);
+  });
+
+  it("returns the normal JSON error before reading a limited submission", async () => {
+    rateLimiter.limit = vi.fn().mockResolvedValue({ success: false });
+    const response = await SELF.fetch("https://hardwareclub.org/api/submit", {
+      method: "POST",
+      headers: { "content-type": "application/json", accept: "application/json" },
+      body: "not JSON",
+    });
+
+    expect(response.status).toBe(429);
+    expect(await response.json()).toEqual({
+      ok: false,
+      errors: { form: "Too many submissions. Please try again in a minute." },
+    });
+    expect(await submissionRows()).toHaveLength(0);
+    expect(notifier.send).not.toHaveBeenCalled();
+  });
+
+  it("returns the normal HTML error for a limited no-JS submission", async () => {
+    rateLimiter.limit = vi.fn().mockResolvedValue({ success: false });
+    const response = await SELF.fetch("https://hardwareclub.org/api/submit", {
+      method: "POST",
+      headers: { "content-type": "application/x-www-form-urlencoded" },
+      body: buildFormBody().toString(),
+    });
+
+    expect(response.status).toBe(429);
+    expect(response.headers.get("content-type")).toContain("text/html");
+    expect(await response.text()).toContain("Too many submissions. Please try again in a minute.");
+    expect(await submissionRows()).toHaveLength(0);
+  });
+
+  it("allows a local request when the binding is absent", async () => {
+    const localEnv = { ...env, SUBMIT_RATE_LIMIT: undefined } as unknown as Env;
+    const request = new Request("http://localhost/api/submit", {
+      method: "POST",
+      headers: { "content-type": "application/x-www-form-urlencoded", accept: "application/json" },
+      body: buildFormBody().toString(),
+    });
+
+    const response = await handleSubmit(request, localEnv);
+
+    expect(response.status).toBe(200);
+    expect(rateLimiter.limit).not.toHaveBeenCalled();
+    expect(await submissionRows()).toHaveLength(1);
+  });
+
+  it("rejects a production request when the binding is absent", async () => {
+    const localEnv = { ...env, SUBMIT_RATE_LIMIT: undefined } as unknown as Env;
+    const request = new Request("https://hardwareclub.org/api/submit", {
+      method: "POST",
+      headers: { accept: "application/json" },
+    });
+
+    const response = await handleSubmit(request, localEnv);
+
+    expect(response.status).toBe(500);
+    expect(await response.json()).toEqual({
+      ok: false,
+      errors: { form: "Sorry, our form isn't working right now. Please try again later." },
+    });
+    expect(rateLimiter.limit).not.toHaveBeenCalled();
+  });
+
   it("treats a filled honeypot as success and stores nothing", async () => {
     const body = buildFormBody({ website: "https://spam.example" });
 
