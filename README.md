@@ -61,6 +61,34 @@ Then delete that specific row from the remote database (replace
 npx wrangler d1 execute hardwareclub-submissions --remote --command "DELETE FROM submissions WHERE id = 'SUBMISSION_UUID';"
 ```
 
+## Failure alerts
+
+Create a dedicated healthchecks.io check for donation processing failures and
+enable its alert channel. This check receives only failure pings, with no
+scheduled success pings. Set its period and grace time long enough that normal
+silence will not trigger a missing-ping alert; review those limits before they
+expire. Copy the check's `/fail` ping URL into the optional Worker secret:
+
+```sh
+npx wrangler secret put HC_FAIL_URL
+```
+
+The Worker posts only `d1-insert` or `notify` to that URL when storing a
+submission or sending its notification fails. Keep the URL private. Without
+the secret, the Worker retains its error log but sends no failure ping.
+
+healthchecks.io alerts only when the check changes state, so while it stays
+down, later failure pings send no new alert. After handling an alert, reset the
+check to up by sending a success ping to the same URL without the trailing
+`/fail` (replace `PING_URL`):
+
+```sh
+curl -fsS -m 10 --retry 3 PING_URL
+```
+
+That success ping also restarts the period timer, which is why the period and
+grace time must be long.
+
 ## One-time production checklist (account owner)
 
 Before the first real deploy is useful in production:
@@ -92,8 +120,8 @@ Before the first real deploy is useful in production:
 - `public/` — static HTML/CSS/JS pages, fonts, and images.
 - `src/` — the Worker: routing (`index.ts`), the submission handler
   (`submit.ts`, `body.ts`, `validate.ts`), Turnstile verification
-  (`turnstile.ts`), email (`email.ts`), the scheduled retention purge
-  (`retention.ts`), and shared concerns (`html.ts`,
+  (`turnstile.ts`), email (`email.ts`), failure alerts (`failure-alert.ts`),
+  the scheduled retention purge (`retention.ts`), and shared concerns (`html.ts`,
   `security.ts`, `site.ts`).
 - `migrations/` — D1 schema migrations.
 - `test/` — Vitest tests running against the real Workers runtime.

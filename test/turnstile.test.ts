@@ -1,4 +1,4 @@
-import { env, SELF } from "cloudflare:test";
+import { createExecutionContext, env, SELF } from "cloudflare:test";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import worker from "../src/index";
 import { rateLimiter } from "../src/submit";
@@ -51,7 +51,7 @@ function postWithEnv(overrides: Partial<Env>, origin = "https://hardwareclub.org
     headers: { "content-type": "application/x-www-form-urlencoded", accept: "application/json" },
     body: validFormBody(),
   }) as IncomingRequest;
-  return worker.fetch(request, { ...env, ...overrides });
+  return worker.fetch(request, { ...env, ...overrides }, createExecutionContext());
 }
 
 beforeEach(() => {
@@ -236,7 +236,7 @@ describe("GET /api/health with a misconfigured Turnstile", () => {
     const response = await worker.fetch(new Request("https://hardwareclub.org/api/health") as IncomingRequest, {
       ...env,
       TURNSTILE_SITEKEY: TEST_SITEKEY,
-    });
+    }, createExecutionContext());
 
     expect(response.status).toBe(503);
     expect(await response.json()).toEqual({ ok: false });

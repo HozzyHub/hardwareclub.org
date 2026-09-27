@@ -1,6 +1,7 @@
 import { env, SELF } from "cloudflare:test";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { notifier } from "../src/email";
+import { failureAlert } from "../src/failure-alert";
 import { handleSubmit, rateLimiter } from "../src/submit";
 import { turnstile } from "../src/turnstile";
 
@@ -15,6 +16,8 @@ const VALID_FIELDS: Record<string, string> = {
   handoff: "drop-off",
   "cf-turnstile-response": "test-token",
 };
+const realSend = notifier.send;
+const directContext = { waitUntil: (_promise: Promise<unknown>) => {} };
 
 function buildFormBody(overrides: Record<string, string | string[] | undefined> = {}, categories = ["laptops"]) {
   const body = new URLSearchParams();
@@ -49,6 +52,7 @@ beforeEach(() => {
   turnstile.verify = async () => true;
   notifier.send = vi.fn().mockResolvedValue(undefined);
   rateLimiter.limit = vi.fn().mockResolvedValue({ success: true });
+  failureAlert.send = vi.fn().mockResolvedValue(new Response("OK"));
 });
 
 afterEach(async () => {
@@ -121,7 +125,7 @@ describe("POST /api/submit", () => {
       body: buildFormBody().toString(),
     });
 
-    const response = await handleSubmit(request, localEnv);
+    const response = await handleSubmit(request, localEnv, directContext);
 
     expect(response.status).toBe(200);
     expect(rateLimiter.limit).not.toHaveBeenCalled();
@@ -135,7 +139,7 @@ describe("POST /api/submit", () => {
       headers: { accept: "application/json" },
     });
 
-    const response = await handleSubmit(request, localEnv);
+    const response = await handleSubmit(request, localEnv, directContext);
 
     expect(response.status).toBe(500);
     expect(await response.json()).toEqual({
@@ -314,6 +318,7 @@ describe("POST /api/submit", () => {
     expect(row.status).toBe("new");
 
     expect(notifier.send).toHaveBeenCalledTimes(1);
+    expect(failureAlert.send).not.toHaveBeenCalled();
   });
 
   it("accepts a valid JSON submission", async () => {
@@ -359,6 +364,60 @@ describe("POST /api/submit", () => {
     expect(response.status).toBe(200);
     expect(await response.json()).toEqual({ ok: true });
     expect(await submissionRows()).toHaveLength(1);
+    await vi.waitFor(() => expect(failureAlert.send).toHaveBeenCalledExactlyOnceWith("test-fail-url", { method: "POST", body: "notify" }));
+  });
+
+  it("keeps the visitor response when the failure ping rejects", async () => {
+    notifier.send = vi.fn().mockRejectedValue(new Error("email service down"));
+    failureAlert.send = vi.fn().mockRejectedValue(new Error("ping service down"));
+
+    const response = await SELF.fetch("https://hardwareclub.org/api/submit", {
+      method: "POST",
+      headers: { "content-type": "application/x-www-form-urlencoded", accept: "application/json" },
+      body: buildFormBody().toString(),
+    });
+
+    expect(response.status).toBe(200);
+    expect(await response.json()).toEqual({ ok: true });
+    expect(await submissionRows()).toHaveLength(1);
+    await vi.waitFor(() => expect(failureAlert.send).toHaveBeenCalledExactlyOnceWith("test-fail-url", { method: "POST", body: "notify" }));
+  });
+
+  it("does not ping when the optional failure URL is absent", async () => {
+    notifier.send = vi.fn().mockRejectedValue(new Error("email service down"));
+    const localEnv = { ...env, HC_FAIL_URL: undefined } as Env;
+    const request = new Request("https://hardwareclub.org/api/submit", {
+      method: "POST",
+      headers: { "content-type": "application/x-www-form-urlencoded", accept: "application/json" },
+      body: buildFormBody().toString(),
+    });
+
+    const response = await handleSubmit(request, localEnv, directContext);
+
+    expect(response.status).toBe(200);
+    expect(failureAlert.send).not.toHaveBeenCalled();
+  });
+
+  it("does not log donor details when the email binding is absent", async () => {
+    notifier.send = realSend;
+    const localEnv = { ...env, NOTIFY: undefined } as unknown as Env;
+    const log = vi.spyOn(console, "log").mockImplementation(() => {});
+    try {
+      const request = new Request("https://hardwareclub.org/api/submit", {
+        method: "POST",
+        headers: { "content-type": "application/x-www-form-urlencoded", accept: "application/json" },
+        body: buildFormBody().toString(),
+      });
+
+      const response = await handleSubmit(request, localEnv, directContext);
+
+      expect(response.status).toBe(200);
+      expect(log).toHaveBeenCalledWith("NOTIFY binding unavailable; donation notification email skipped");
+      expect(JSON.stringify(log.mock.calls)).not.toContain(VALID_FIELDS.email);
+      expect(JSON.stringify(log.mock.calls)).not.toContain(VALID_FIELDS.description);
+    } finally {
+      log.mockRestore();
+    }
   });
 
   it("returns the site's own HTML error page when storing the submission fails on the no-JS path", async () => {
@@ -377,6 +436,7 @@ describe("POST /api/submit", () => {
       expect(html).toContain("There was a problem with your submission");
       expect(html).toContain('href="/#donate"');
       expect(notifier.send).not.toHaveBeenCalled();
+      await vi.waitFor(() => expect(failureAlert.send).toHaveBeenCalledExactlyOnceWith("test-fail-url", { method: "POST", body: "d1-insert" }));
     });
   });
 
