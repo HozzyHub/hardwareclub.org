@@ -1,6 +1,7 @@
 import { env, SELF } from "cloudflare:test";
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import worker from "../src/index";
+import { rateLimiter } from "../src/submit";
 import { turnstile, TurnstileConfigError, turnstileConfigProblem } from "../src/turnstile";
 
 const TEST_SITEKEY = "1x00000000000000000000AA";
@@ -52,6 +53,10 @@ function postWithEnv(overrides: Partial<Env>, origin = "https://hardwareclub.org
   }) as IncomingRequest;
   return worker.fetch(request, { ...env, ...overrides });
 }
+
+beforeEach(() => {
+  rateLimiter.limit = vi.fn().mockResolvedValue({ success: true });
+});
 
 afterEach(() => {
   vi.restoreAllMocks();

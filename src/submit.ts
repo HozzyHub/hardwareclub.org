@@ -5,6 +5,11 @@ import { validateSubmission, type ValidationErrors } from "./validate";
 
 const MAX_BODY_BYTES = 16 * 1024;
 const FORM_UNAVAILABLE = "Sorry, our form isn't working right now. Please try again later.";
+const TOO_MANY_SUBMISSIONS = "Too many submissions. Please try again in a minute.";
+
+export const rateLimiter = {
+  limit: (binding: RateLimit, key: string) => binding.limit({ key }),
+};
 
 function escapeHtml(value: string): string {
   return value
@@ -49,6 +54,17 @@ function errorResponse(errors: ValidationErrors, status: number, asJson: boolean
 
 export async function handleSubmit(request: Request, env: Env): Promise<Response> {
   const asJson = wantsJson(request);
+
+  if (env.SUBMIT_RATE_LIMIT) {
+    const ip = request.headers.get("cf-connecting-ip") ?? "unknown";
+    const { success } = await rateLimiter.limit(env.SUBMIT_RATE_LIMIT, ip);
+    if (!success) {
+      return errorResponse({ form: TOO_MANY_SUBMISSIONS }, 429, asJson);
+    }
+  } else if (new URL(request.url).hostname !== "localhost") {
+    console.error("Submission rate limit binding missing");
+    return errorResponse({ form: FORM_UNAVAILABLE }, 500, asJson);
+  }
 
   let raw;
   try {
