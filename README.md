@@ -8,8 +8,8 @@ Static Assets. The Worker runs first for every request (`run_worker_first` in
 and `http://` to the https apex, handles `POST /api/submit` (rate-limits per
 client IP via the `SUBMIT_RATE_LIMIT` binding in `wrangler.jsonc`, validates a
 donation offer, stores it in D1, and emails the maintainer), and sets the
-security headers from `src/security.ts` (including HSTS) on every response,
-static assets included. There is no `public/_headers` file.
+security headers from `src/security.ts` on every response, static assets
+included. HSTS is sent only on the apex. There is no `public/_headers` file.
 
 ## Local development
 

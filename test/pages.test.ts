@@ -56,8 +56,14 @@ describe("HTTPS enforcement", () => {
     expect(response.headers.get("strict-transport-security")).toBe("max-age=31536000");
   });
 
-  it("sends HSTS on the https www redirect", async () => {
-    const response = await SELF.fetch("https://www.hardwareclub.org/", { redirect: "manual" });
+  it.each(["http", "https"])("does not send HSTS on the %s www redirect", async (protocol) => {
+    const response = await SELF.fetch(`${protocol}://www.hardwareclub.org/`, { redirect: "manual" });
+
+    expect(response.headers.get("strict-transport-security")).toBeNull();
+  });
+
+  it("sends HSTS on the apex http redirect", async () => {
+    const response = await SELF.fetch("http://hardwareclub.org/", { redirect: "manual" });
 
     expect(response.headers.get("strict-transport-security")).toBe("max-age=31536000");
   });
@@ -66,6 +72,7 @@ describe("HTTPS enforcement", () => {
     const response = await SELF.fetch("http://localhost:8787/api/health", { redirect: "manual" });
 
     expect(response.status).toBe(200);
+    expect(response.headers.get("strict-transport-security")).toBeNull();
   });
 });
 
