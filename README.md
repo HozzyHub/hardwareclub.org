@@ -43,9 +43,16 @@ on pull requests.
 
 The Worker runs a monthly Cron Trigger at 00:00 UTC on the first day of each
 month. It deletes D1 submissions older than 12 months and logs only the number
-of rows deleted. After a handoff is complete, find the submission's `id` and
-delete that specific row from the remote database (replace `SUBMISSION_UUID`
-with the exact ID):
+of rows deleted. After a handoff is complete, look up the submission's `id` by
+the donor's email address (replace `DONOR_EMAIL`), since the notification email
+does not include it:
+
+```sh
+npx wrangler d1 execute hardwareclub-submissions --remote --command "SELECT id, created_at, name, email FROM submissions WHERE lower(email) = lower('DONOR_EMAIL');"
+```
+
+Then delete that specific row from the remote database (replace
+`SUBMISSION_UUID` with the exact ID):
 
 ```sh
 npx wrangler d1 execute hardwareclub-submissions --remote --command "DELETE FROM submissions WHERE id = 'SUBMISSION_UUID';"
