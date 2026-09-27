@@ -19,6 +19,8 @@ export function withSecurityHeaders(response: Response, hostname: string): Respo
   headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
   headers.set("Permissions-Policy", "camera=(), microphone=(), geolocation=()");
   headers.set("X-Frame-Options", "DENY");
+  // HSTS is scoped to the apex only; includeSubDomains/preload are
+  // deliberately off so other subdomains aren't pinned to HTTPS.
   if (hostname === APEX_HOST) {
     headers.set("Strict-Transport-Security", "max-age=31536000");
   } else {
