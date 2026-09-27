@@ -40,6 +40,18 @@ the Cloudflare dashboard. On merge to `main` it runs `npm run build` then
 (`.github/workflows/ci.yml`) only runs `npm ci && npm test && npm run check`
 on pull requests.
 
+## Submission retention
+
+The Worker runs a monthly Cron Trigger at 00:00 UTC on the first day of each
+month. It deletes D1 submissions older than 12 months and logs only the number
+of rows deleted. After a handoff is complete, find the submission's `id` and
+delete that specific row from the remote database (replace `SUBMISSION_UUID`
+with the exact ID):
+
+```sh
+npx wrangler d1 execute hardwareclub-submissions --remote --command "DELETE FROM submissions WHERE id = 'SUBMISSION_UUID';"
+```
+
 ## One-time production checklist (account owner)
 
 Before the first real deploy is useful in production:

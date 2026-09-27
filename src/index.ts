@@ -2,6 +2,7 @@ import { serveIndex } from "./html";
 import { withSecurityHeaders } from "./security";
 import { APEX_HOST, WWW_HOST } from "./site";
 import { handleSubmit } from "./submit";
+import { purgeExpiredSubmissions } from "./retention";
 import { turnstileConfigProblem } from "./turnstile";
 
 export default {
@@ -33,5 +34,9 @@ export default {
     }
 
     return withSecurityHeaders(response, hostname);
+  },
+  async scheduled(controller, env): Promise<void> {
+    const deleted = await purgeExpiredSubmissions(env.DB, new Date(controller.scheduledTime));
+    console.log(`Purged ${deleted} expired submissions`);
   },
 } satisfies ExportedHandler<Env>;
