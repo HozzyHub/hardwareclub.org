@@ -48,11 +48,7 @@ export function buildRawMessage(to: string, data: NormalizedSubmission): string 
 
 async function sendViaBinding(env: Env, data: NormalizedSubmission): Promise<void> {
   if (!env.NOTIFY) {
-    console.log("NOTIFY binding unavailable; would have sent email.", {
-      to: env.NOTIFY_TO,
-      subject: formatSubject(data),
-      body: formatBody(data),
-    });
+    console.log("NOTIFY binding unavailable; donation notification email skipped");
     return;
   }
 

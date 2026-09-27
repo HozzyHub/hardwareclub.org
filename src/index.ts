@@ -6,7 +6,7 @@ import { purgeExpiredSubmissions } from "./retention";
 import { turnstileConfigProblem } from "./turnstile";
 
 export default {
-  async fetch(request, env): Promise<Response> {
+  async fetch(request, env, ctx): Promise<Response> {
     const url = new URL(request.url);
     const hostname = url.hostname;
 
@@ -26,7 +26,7 @@ export default {
       if (problem) console.error(`Turnstile misconfigured: ${problem}`);
       response = Response.json({ ok: !problem }, { status: problem ? 503 : 200 });
     } else if (url.pathname === "/api/submit" && request.method === "POST") {
-      response = await handleSubmit(request, env);
+      response = await handleSubmit(request, env, ctx);
     } else if (url.pathname === "/" || url.pathname === "/index.html") {
       response = await serveIndex(request, env.ASSETS, env.TURNSTILE_SITEKEY);
     } else {

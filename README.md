@@ -61,6 +61,22 @@ Then delete that specific row from the remote database (replace
 npx wrangler d1 execute hardwareclub-submissions --remote --command "DELETE FROM submissions WHERE id = 'SUBMISSION_UUID';"
 ```
 
+## Failure alerts
+
+Create a dedicated healthchecks.io check for donation processing failures and
+enable its alert channel. This check receives only failure pings, with no
+scheduled success pings. Set its period and grace time long enough that normal
+silence will not trigger a missing-ping alert; review those limits before they
+expire. Copy the check's `/fail` ping URL into the optional Worker secret:
+
+```sh
+npx wrangler secret put HC_FAIL_URL
+```
+
+The Worker posts only `d1-insert` or `notify` to that URL when storing a
+submission or sending its notification fails. Keep the URL private. Without
+the secret, the Worker retains its error log but sends no failure ping.
+
 ## One-time production checklist (account owner)
 
 Before the first real deploy is useful in production:

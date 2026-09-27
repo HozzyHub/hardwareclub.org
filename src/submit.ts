@@ -1,5 +1,6 @@
 import { BodyTooLargeError, parseBody, wantsJson, withBodyLimit } from "./body";
 import { notifier } from "./email";
+import { reportFailure } from "./failure-alert";
 import { turnstile, TurnstileConfigError, turnstileConfigProblem } from "./turnstile";
 import { validateSubmission, type ValidationErrors } from "./validate";
 
@@ -52,7 +53,7 @@ function errorResponse(errors: ValidationErrors, status: number, asJson: boolean
   });
 }
 
-export async function handleSubmit(request: Request, env: Env): Promise<Response> {
+export async function handleSubmit(request: Request, env: Env, ctx: Pick<ExecutionContext, "waitUntil">): Promise<Response> {
   const asJson = wantsJson(request);
 
   if (env.SUBMIT_RATE_LIMIT) {
@@ -139,6 +140,7 @@ export async function handleSubmit(request: Request, env: Env): Promise<Response
       .run();
   } catch (err) {
     console.error("Failed to store donation submission", err);
+    reportFailure(env, ctx, "d1-insert");
     return errorResponse({ form: "We couldn't save your submission. Please try again in a moment." }, 500, asJson);
   }
 
@@ -146,6 +148,7 @@ export async function handleSubmit(request: Request, env: Env): Promise<Response
     await notifier.send(env, data);
   } catch (err) {
     console.error("Failed to send donation notification email", err);
+    reportFailure(env, ctx, "notify");
   }
 
   return successResponse(request, asJson);

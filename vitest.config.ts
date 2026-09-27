@@ -18,6 +18,7 @@ export default defineConfig({
             // production-shaped placeholders instead of the .dev.vars ones.
             TURNSTILE_SITEKEY: "test-suite-sitekey",
             TURNSTILE_SECRET: "test-suite-secret",
+            HC_FAIL_URL: "test-fail-url",
           },
         },
       };
