@@ -7,6 +7,7 @@ import { turnstileConfigProblem } from "./turnstile";
 export default {
   async fetch(request, env): Promise<Response> {
     const url = new URL(request.url);
+    const hostname = url.hostname;
 
     // Donor PII must never travel over plaintext: send www and any http://
     // request on the production hosts to the https apex. Other hosts (e.g.
@@ -14,7 +15,7 @@ export default {
     if (url.hostname === WWW_HOST || (url.hostname === APEX_HOST && url.protocol === "http:")) {
       url.protocol = "https:";
       url.hostname = APEX_HOST;
-      return withSecurityHeaders(Response.redirect(url.toString(), 301));
+      return withSecurityHeaders(Response.redirect(url.toString(), 301), hostname);
     }
 
     let response: Response;
@@ -31,6 +32,6 @@ export default {
       response = await env.ASSETS.fetch(request);
     }
 
-    return withSecurityHeaders(response);
+    return withSecurityHeaders(response, hostname);
   },
 } satisfies ExportedHandler<Env>;
