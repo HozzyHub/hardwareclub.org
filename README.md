@@ -43,13 +43,13 @@ on pull requests.
 
 Before the first real deploy is useful in production:
 
-1. Create a Turnstile widget for `hardwareclub.org` in the Cloudflare
-   dashboard, then:
-   - `npx wrangler secret put TURNSTILE_SECRET` with the real secret key.
-   - Update `vars.TURNSTILE_SITEKEY` in `wrangler.jsonc` to the real site key.
-   - Until both are real, the Worker refuses donations on `hardwareclub.org`
-     with a logged 500 and `/api/health` returns 503: Cloudflare's test keys
-     are only accepted off the production host (local dev).
+1. Set the Turnstile secret for the "hardwareclub.org contact form" widget
+   (its public site key is already `vars.TURNSTILE_SITEKEY` in
+   `wrangler.jsonc`):
+   - `npx wrangler secret put TURNSTILE_SECRET` with the widget's secret key.
+   - Until a real secret is set, the Worker refuses donations on
+     `hardwareclub.org` with a logged 500 and `/api/health` returns 503
+     (Cloudflare's test keys are only accepted off the production host).
 2. Enable Email Routing on the `hardwareclub.org` zone and verify
    `randalwadejr@gmail.com` as a destination address. That address appears
    twice in `wrangler.jsonc` (`vars.NOTIFY_TO`, which the Worker sends to, and
