@@ -77,6 +77,18 @@ The Worker posts only `d1-insert` or `notify` to that URL when storing a
 submission or sending its notification fails. Keep the URL private. Without
 the secret, the Worker retains its error log but sends no failure ping.
 
+healthchecks.io alerts only when the check changes state, so while it stays
+down, later failure pings send no new alert. After handling an alert, reset the
+check to up by sending a success ping to the same URL without the trailing
+`/fail` (replace `PING_URL`):
+
+```sh
+curl -fsS -m 10 --retry 3 PING_URL
+```
+
+That success ping also restarts the period timer, which is why the period and
+grace time must be long.
+
 ## One-time production checklist (account owner)
 
 Before the first real deploy is useful in production:
