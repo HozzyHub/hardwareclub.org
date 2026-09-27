@@ -10,6 +10,8 @@ client IP via the `SUBMIT_RATE_LIMIT` binding in `wrangler.jsonc`, validates a
 donation offer, stores it in D1, and emails the maintainer), and sets the
 security headers from `src/security.ts` on every response, static assets
 included. HSTS is sent only on the apex. There is no `public/_headers` file.
+A monthly Cron Trigger also purges old submissions (see
+[Submission retention](#submission-retention)).
 
 ## Local development
 
@@ -39,6 +41,25 @@ the Cloudflare dashboard. On merge to `main` it runs `npm run build` then
 `npx wrangler deploy`. There is no GitHub Actions deploy workflow; CI
 (`.github/workflows/ci.yml`) only runs `npm ci && npm test && npm run check`
 on pull requests.
+
+## Submission retention
+
+The Worker runs a monthly Cron Trigger at 00:00 UTC on the first day of each
+month. It deletes D1 submissions older than 12 months and logs only the number
+of rows deleted. After a handoff is complete, look up the submission's `id` by
+the donor's email address (replace `DONOR_EMAIL`), since the notification email
+does not include it:
+
+```sh
+npx wrangler d1 execute hardwareclub-submissions --remote --command "SELECT id, created_at, name, email FROM submissions WHERE lower(email) = lower('DONOR_EMAIL');"
+```
+
+Then delete that specific row from the remote database (replace
+`SUBMISSION_UUID` with the exact ID):
+
+```sh
+npx wrangler d1 execute hardwareclub-submissions --remote --command "DELETE FROM submissions WHERE id = 'SUBMISSION_UUID';"
+```
 
 ## One-time production checklist (account owner)
 
@@ -71,7 +92,8 @@ Before the first real deploy is useful in production:
 - `public/` — static HTML/CSS/JS pages, fonts, and images.
 - `src/` — the Worker: routing (`index.ts`), the submission handler
   (`submit.ts`, `body.ts`, `validate.ts`), Turnstile verification
-  (`turnstile.ts`), email (`email.ts`), and shared concerns (`html.ts`,
+  (`turnstile.ts`), email (`email.ts`), the scheduled retention purge
+  (`retention.ts`), and shared concerns (`html.ts`,
   `security.ts`, `site.ts`).
 - `migrations/` — D1 schema migrations.
 - `test/` — Vitest tests running against the real Workers runtime.
