@@ -38,14 +38,14 @@
 
 :root {
   color-scheme: dark;
-  --bg: #0a1628;
+  --bg: #071019;
   --surface: #10213a;
   --ink: #eef2f7;
   --muted: #a3afc2;
   --line: rgba(255, 255, 255, 0.08);
-  --accent: #f5b700;
-  --accent-ink: #0a1628;
-  --accent-soft: rgba(245, 183, 0, 0.13);
+  --accent: #33d1c9;
+  --accent-ink: #062521;
+  --accent-soft: rgba(51, 209, 201, 0.14);
   --radius: 8px;
   --content-width: 1100px;
   --gutter: 16px;
@@ -304,6 +304,11 @@ a:focus-visible {
 
 /* Hero */
 .hero {
+  background-image:
+    linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+  background-size: 28px 28px;
+  background-color: var(--bg);
   padding: calc(var(--section-gap) * 1.1) 0 var(--section-gap);
 }
 
