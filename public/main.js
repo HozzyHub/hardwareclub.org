@@ -20,6 +20,7 @@
     var invalidFields = form.querySelectorAll('[aria-invalid="true"]');
     for (var j = 0; j < invalidFields.length; j++) {
       invalidFields[j].removeAttribute("aria-invalid");
+      invalidFields[j].removeAttribute("aria-describedby");
     }
     statusBox.hidden = true;
     statusBox.textContent = "";
@@ -41,12 +42,14 @@
     var p = document.createElement("p");
     p.className = "field-error";
     p.tabIndex = -1;
+    p.id = "error-" + name.replace(/[^a-z0-9_-]/gi, "");
     p.textContent = message;
 
     if (anchor.matches("input, select, textarea")) {
       var controls = form.querySelectorAll('[name="' + anchor.name + '"]');
       for (var i = 0; i < controls.length; i++) {
         controls[i].setAttribute("aria-invalid", "true");
+        controls[i].setAttribute("aria-describedby", p.id);
       }
       var container = anchor.closest("fieldset, .field");
       if (container) {
