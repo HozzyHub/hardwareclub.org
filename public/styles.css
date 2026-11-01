@@ -66,6 +66,7 @@
 
 html {
   background: var(--bg);
+  scroll-padding-top: 4.5rem;
 }
 
 body {
