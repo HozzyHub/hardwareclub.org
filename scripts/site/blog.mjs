@@ -1,0 +1,14 @@
+// STUB: replaced by the blog work.
+export const pages = [
+  {
+    url: "/blog",
+    crumb: "Blog",
+    title: "Blog",
+    description: "Blog from Hardware Club.",
+    eyebrow: "Coming soon",
+    h1: "Blog",
+    lede: "This page is on its way.",
+    body: "",
+  },
+];
+export const files = [{ path: "blog/feed.xml", content: "<?xml version=\"1.0\" encoding=\"utf-8\"?>\\n<feed xmlns=\"http://www.w3.org/2005/Atom\"><title>Hardware Club</title><id>https://hardwareclub.org/blog</id><updated>2026-11-03T00:00:00Z</updated></feed>\\n" }];

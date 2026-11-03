@@ -90,4 +90,4 @@ export const pages = [
   downloadsPage,
 ];
 
-export const downloads = downloadFiles;
+export const files = downloadFiles.map((d) => ({ path: `downloads/${d.file}`, content: d.content }));

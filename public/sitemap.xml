@@ -42,4 +42,16 @@
   <url>
     <loc>https://hardwareclub.org/resources/downloads</loc>
   </url>
+  <url>
+    <loc>https://hardwareclub.org/blog</loc>
+  </url>
+  <url>
+    <loc>https://hardwareclub.org/security</loc>
+  </url>
+  <url>
+    <loc>https://hardwareclub.org/security/exploited</loc>
+  </url>
+  <url>
+    <loc>https://hardwareclub.org/security/device-support</loc>
+  </url>
 </urlset>

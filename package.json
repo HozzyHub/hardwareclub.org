@@ -14,7 +14,7 @@
     "check:types": "tsc --noEmit",
     "check:html": "html-validate \"public/**/*.html\"",
     "check:links": "node scripts/check-links.mjs",
-    "build": "node scripts/build-resources.mjs && node scripts/build-og.mjs",
+    "build": "node scripts/build-pages.mjs && node scripts/build-og.mjs",
     "deploy": "wrangler deploy"
   },
   "devDependencies": {
