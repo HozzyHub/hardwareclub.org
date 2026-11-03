@@ -31,7 +31,7 @@ function render(page) {
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#071019">
+<meta name="theme-color" content="#07050c">
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(page.description)}">
 <link rel="canonical" href="${url}">
@@ -52,8 +52,6 @@ function render(page) {
 <meta name="twitter:image:alt" content="Hardware Club: old tech, new purpose.">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="alternate icon" href="/favicon.ico">
-<link rel="preload" href="/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/styles.css">
 ${ld}</head>
 <body>

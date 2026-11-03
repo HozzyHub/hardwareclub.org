@@ -1,57 +1,25 @@
-/* Hardware Club — design system */
+/* Hardware Club — design system (tokens follow the HozzyLabs brand: monospace, violet on near-black) */
 
-@font-face {
-  font-family: "Manrope";
-  font-style: normal;
-  font-weight: 700;
-  font-display: swap;
-  src: url("/fonts/manrope-latin.woff2") format("woff2");
-}
-@font-face {
-  font-family: "Manrope";
-  font-style: normal;
-  font-weight: 800;
-  font-display: swap;
-  src: url("/fonts/manrope-latin.woff2") format("woff2");
-}
-@font-face {
-  font-family: "Inter";
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url("/fonts/inter-latin.woff2") format("woff2");
-}
-@font-face {
-  font-family: "Inter";
-  font-style: normal;
-  font-weight: 500;
-  font-display: swap;
-  src: url("/fonts/inter-latin.woff2") format("woff2");
-}
-@font-face {
-  font-family: "Inter";
-  font-style: normal;
-  font-weight: 600;
-  font-display: swap;
-  src: url("/fonts/inter-latin.woff2") format("woff2");
-}
 
 :root {
   color-scheme: dark;
-  --bg: #071019;
-  --surface: #10213a;
-  --ink: #eef2f7;
-  --muted: #a3afc2;
-  --line: rgba(255, 255, 255, 0.08);
-  --accent: #33d1c9;
-  --accent-ink: #062521;
-  --accent-soft: rgba(51, 209, 201, 0.14);
-  --radius: 8px;
+  --bg: #07050c;
+  --surface: #0e0a18;
+  --ink: #e6ddff;
+  --muted: #a99cc9;
+  --line: #2a1f45;
+  --accent: #c084fc;
+  --accent-ink: #07050c;
+  --accent-soft: rgba(192, 132, 252, 0.14);
+  --accent-bright: #e9d5ff;
+  --accent-dim: #7c3aed;
+  --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  --radius: 6px;
   --content-width: 1100px;
   --gutter: 16px;
   --section-gap: 96px;
-  --font-heading: "Manrope", system-ui, sans-serif;
-  --font-body: "Inter", system-ui, sans-serif;
+  --font-heading: var(--mono);
+  --font-body: var(--mono);
 }
 
 @media (max-width: 640px) {
@@ -75,8 +43,8 @@ body {
   color: var(--ink);
   font-family: var(--font-body);
   font-weight: 400;
-  font-size: 16px;
-  line-height: 1.6;
+  font-size: 15px;
+  line-height: 1.65;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
 }
@@ -90,7 +58,7 @@ h1,
 h2,
 h3 {
   font-family: var(--font-heading);
-  font-weight: 800;
+  font-weight: 600;
   line-height: 1.15;
   margin: 0 0 0.5em;
 }
@@ -192,7 +160,7 @@ a:focus-visible {
   position: sticky;
   top: 0;
   z-index: 50;
-  background: rgba(7, 16, 25, 0.92);
+  background: rgba(7, 5, 12, 0.92);
   backdrop-filter: blur(6px);
   border-bottom: 1px solid var(--line);
 }
@@ -382,7 +350,7 @@ a:focus-visible {
   background: var(--accent-soft);
   color: var(--accent);
   font-family: var(--font-heading);
-  font-weight: 800;
+  font-weight: 600;
   margin-bottom: 1rem;
 }
 
@@ -940,4 +908,46 @@ a:focus-visible {
   a {
     color: #000;
   }
+}
+
+/* HozzyLabs terminal accents */
+h1 {
+  color: var(--accent-bright);
+  text-shadow: 0 0 18px rgba(192, 132, 252, 0.35);
+}
+
+h2 {
+  color: var(--accent);
+}
+
+.resource-page h1::before,
+.simple-page h1::before {
+  content: "$ ";
+  color: var(--accent);
+}
+
+.resource-page h2::before,
+.simple-page h2::before {
+  content: "> ";
+  color: var(--accent-dim);
+}
+
+.res-card,
+.step,
+.card,
+.link-list li,
+.download-list li,
+.tool-result,
+.note-card {
+  border-left: 3px solid var(--accent-dim);
+}
+
+.res-card:hover,
+.res-card:focus-visible {
+  border-color: var(--accent);
+  box-shadow: 0 0 18px rgba(192, 132, 252, 0.18);
+}
+
+.res-title {
+  color: var(--accent-bright);
 }
