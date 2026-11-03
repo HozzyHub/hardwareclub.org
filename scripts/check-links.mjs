@@ -9,8 +9,12 @@ async function listHtmlFiles(dir) {
   const entries = await readdir(dir, { withFileTypes: true });
   const files = [];
   for (const entry of entries) {
-    if (entry.isDirectory()) continue;
-    if (entry.name.endsWith(".html")) files.push(path.join(dir, entry.name));
+    const full = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      if (entry.name !== "fonts" && entry.name !== "downloads") files.push(...(await listHtmlFiles(full)));
+    } else if (entry.name.endsWith(".html")) {
+      files.push(full);
+    }
   }
   return files;
 }

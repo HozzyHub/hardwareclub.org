@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#07050c">
+<title>Donate, repair, or recycle? A quick decision tool · Hardware Club</title>
+<meta name="description" content="Answer a few questions about an old device and get a plain recommendation: keep using it, repair it, donate it to Hardware Club, or take it to a recycler.">
+<link rel="canonical" href="https://hardwareclub.org/resources/donate-or-recycle">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Donate, repair, or recycle? A quick decision tool · Hardware Club">
+<meta property="og:description" content="Answer a few questions about an old device and get a plain recommendation: keep using it, repair it, donate it to Hardware Club, or take it to a recycler.">
+<meta property="og:url" content="https://hardwareclub.org/resources/donate-or-recycle">
+<meta property="og:image" content="https://hardwareclub.org/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Hardware Club: old tech, new purpose.">
+<meta property="og:site_name" content="Hardware Club">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Donate, repair, or recycle? A quick decision tool · Hardware Club">
+<meta name="twitter:description" content="Answer a few questions about an old device and get a plain recommendation: keep using it, repair it, donate it to Hardware Club, or take it to a recycler.">
+<meta name="twitter:image" content="https://hardwareclub.org/og.png">
+<meta name="twitter:image:alt" content="Hardware Club: old tech, new purpose.">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="alternate icon" href="/favicon.ico">
+<link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-nav">
+  <div class="container">
+    <a class="brand" href="/">
+      <svg class="mark" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="11" y="11" width="26" height="26" rx="6"/><path d="M18 11V6M24 11V6M30 11V6M18 42V37M24 42V37M30 42V37M11 18H6M11 24H6M11 30H6M42 18H37M42 24H37M42 30H37"/><path d="M30.5 20.3A7.5 7.5 0 1 0 31.1 26.6"/><path d="M27.7 27.9L31.2 26.4L32.7 29.9"/></svg>
+      <span>Hardware Club</span>
+    </a>
+    <nav class="nav-links" aria-label="Primary">
+      <a class="nav-link" href="/resources" aria-current="page">Resources</a>
+      <a class="nav-link" href="/#faq">FAQ</a>
+      <a class="btn btn-primary" href="/#donate">Donate hardware</a>
+    </nav>
+  </div>
+</header>
+<main id="main" class="resource-page">
+  <div class="container">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/resources">Resources</a> <span aria-hidden="true">/</span> <span>Donate, repair, or recycle?</span></nav>
+    <p class="eyebrow">Tool</p>
+    <h1>Donate, repair, or recycle?</h1>
+    <p class="lede">Tell us about the device. The answer appears below and nothing you choose leaves your browser.</p>
+
+    <form id="triage-form" class="tool-form" data-tool="triage">
+
+      <div class="field">
+        <label for="device">What is it?</label>
+        <select id="device" name="device">
+          <option value="laptop">Laptop</option>
+          <option value="desktop">Desktop or all-in-one</option>
+          <option value="server">Server or workstation</option>
+          <option value="mobile">Phone or tablet</option>
+          <option value="parts">Parts, cables, memory or drives</option>
+          <option value="other">TV, CRT monitor, printer or appliance</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="power">Does it work?</label>
+        <select id="power" name="power">
+          <option value="works">Yes, works fine</option>
+          <option value="issues">Powers on, but something is wrong</option>
+          <option value="dead">Doesn't power on</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="age">How old is it?</label>
+        <select id="age" name="age">
+          <option value="new">Under 5 years</option>
+          <option value="mid">5 to 10 years</option>
+          <option value="old">Over 10 years</option>
+        </select>
+      </div>
+      <label class="checkbox-single"><input type="checkbox" id="swollen" name="swollen"> <span>The battery is swollen, bulging, leaking or very hot</span></label>
+      <button class="visually-hidden" type="submit">Show recommendation</button>
+    </form>
+    <div id="triage-result" class="tool-result" role="status" aria-live="polite" hidden></div>
+    <noscript>
+      <div class="note-card">This tool needs JavaScript. In short: swollen batteries, TVs, CRTs, printers and appliances go to a drop-off listed in the <a href="/resources/local-directory">directory</a>; working or broken laptops, desktops, servers, phones and parts can be <a href="/#donate">offered to Hardware Club</a>.</div>
+    </noscript>
+    <p class="muted-text">This is general guidance. If you're unsure, <a href="/#donate">send us the details</a> and we'll tell you honestly.</p>
+  </div>
+</main>
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-brand">
+      <svg class="mark" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="11" y="11" width="26" height="26" rx="6"/><path d="M18 11V6M24 11V6M30 11V6M18 42V37M24 42V37M30 42V37M11 18H6M11 24H6M11 30H6M42 18H37M42 24H37M42 30H37"/><path d="M30.5 20.3A7.5 7.5 0 1 0 31.1 26.6"/><path d="M27.7 27.9L31.2 26.4L32.7 29.9"/></svg>
+      <span>Hardware Club · an independent project in Metro Detroit · hello@hardwareclub.org</span>
+    </div>
+    <div class="footer-links">
+      <a href="/resources">Resources</a>
+      <a href="/privacy">Privacy</a>
+    </div>
+  </div>
+</footer>
+<script src="/tools.js" defer></script>
+</body>
+</html>

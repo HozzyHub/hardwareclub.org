@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#07050c">
+<title>Put Linux on an old computer · Hardware Club</title>
+<meta name="description" content="How to try and install a free, up-to-date Linux system on an older computer that Windows no longer supports: choosing a distribution, making a USB installer and installing safely.">
+<link rel="canonical" href="https://hardwareclub.org/resources/linux-on-an-old-pc">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Put Linux on an old computer · Hardware Club">
+<meta property="og:description" content="How to try and install a free, up-to-date Linux system on an older computer that Windows no longer supports: choosing a distribution, making a USB installer and installing safely.">
+<meta property="og:url" content="https://hardwareclub.org/resources/linux-on-an-old-pc">
+<meta property="og:image" content="https://hardwareclub.org/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Hardware Club: old tech, new purpose.">
+<meta property="og:site_name" content="Hardware Club">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Put Linux on an old computer · Hardware Club">
+<meta name="twitter:description" content="How to try and install a free, up-to-date Linux system on an older computer that Windows no longer supports: choosing a distribution, making a USB installer and installing safely.">
+<meta name="twitter:image" content="https://hardwareclub.org/og.png">
+<meta name="twitter:image:alt" content="Hardware Club: old tech, new purpose.">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="alternate icon" href="/favicon.ico">
+<link rel="stylesheet" href="/styles.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Give an old PC a second life with Linux",
+  "description": "How to try and install a free, up-to-date Linux system on an older computer that Windows no longer supports: choosing a distribution, making a USB installer and installing safely.",
+  "datePublished": "2026-11-03",
+  "author": {
+    "@type": "Organization",
+    "name": "Hardware Club"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Hardware Club",
+    "url": "https://hardwareclub.org/"
+  },
+  "mainEntityOfPage": "https://hardwareclub.org/resources/linux-on-an-old-pc"
+}
+</script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-nav">
+  <div class="container">
+    <a class="brand" href="/">
+      <svg class="mark" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="11" y="11" width="26" height="26" rx="6"/><path d="M18 11V6M24 11V6M30 11V6M18 42V37M24 42V37M30 42V37M11 18H6M11 24H6M11 30H6M42 18H37M42 24H37M42 30H37"/><path d="M30.5 20.3A7.5 7.5 0 1 0 31.1 26.6"/><path d="M27.7 27.9L31.2 26.4L32.7 29.9"/></svg>
+      <span>Hardware Club</span>
+    </a>
+    <nav class="nav-links" aria-label="Primary">
+      <a class="nav-link" href="/resources" aria-current="page">Resources</a>
+      <a class="nav-link" href="/#faq">FAQ</a>
+      <a class="btn btn-primary" href="/#donate">Donate hardware</a>
+    </nav>
+  </div>
+</header>
+<main id="main" class="resource-page">
+  <div class="container">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/resources">Resources</a> <span aria-hidden="true">/</span> <span>Linux on an old PC</span></nav>
+    <p class="eyebrow">Guide · Intermediate</p>
+    <h1>Give an old PC a second life with Linux</h1>
+    <p class="lede">A free, supported operating system can keep a computer that Windows has left behind useful for web, email, documents, video calls and more.</p>
+
+    <h2>Why bother</h2>
+    <p>Microsoft ended support for Windows 10 on October 14, 2025, and Windows 11 requires newer hardware features (such as TPM 2.0) that many older but perfectly capable machines lack. Mainstream Linux distributions keep receiving security updates on that same hardware and are free.</p>
+
+    <h2>Choose a distribution</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th scope="col">Distribution</th><th scope="col">Best for</th></tr></thead>
+      <tbody>
+        <tr><th scope="row"><a href="https://linuxmint.com/">Linux Mint</a></th><td>First-timers coming from Windows. Familiar layout, works well on modest hardware (the Xfce edition is lightest).</td></tr>
+        <tr><th scope="row"><a href="https://ubuntu.com/desktop">Ubuntu</a></th><td>Large community, lots of tutorials, long-term-support releases.</td></tr>
+        <tr><th scope="row"><a href="https://fedoraproject.org/workstation/">Fedora Workstation</a></th><td>Newer software, quick updates, good for tinkerers.</td></tr>
+      </tbody>
+    </table></div>
+    <p>As a rough guide, 4 GB of memory is comfortable for everyday use and 2 GB can work with a lightweight desktop. An SSD helps far more than a faster processor does.</p>
+
+    <h2>Try it without installing</h2>
+    <ol>
+      <li>Download the ISO from the project's own site and verify its checksum if they publish one.</li>
+      <li>Write it to a USB stick (4 GB or more, and everything on it will be erased) with a tool such as <a href="https://etcher.balena.io/">balenaEtcher</a>, Rufus on Windows, or Fedora Media Writer.</li>
+      <li>Restart and open the one-time boot menu (often F12, F10, Esc or Option, depending on the maker). Choose the USB stick.</li>
+      <li>Pick "Try" (or the live session). Check that Wi-Fi, sound, the camera, the trackpad and the screen work.</li>
+    </ol>
+
+    <h2>Install</h2>
+    <ol>
+      <li>Back up your files. A full install replaces whatever is on the disk.</li>
+      <li>Choose "erase disk and install" for a clean machine, or install alongside Windows if you have free space and want both. Turn on disk encryption if the laptop travels.</li>
+      <li>Finish setup, install updates, and you're done.</li>
+    </ol>
+
+    <h2>If something doesn't work</h2>
+    <p>Wi-Fi chips, fingerprint readers and some graphics cards are the usual trouble spots. Search the exact model with the distribution name. Many issues have a known fix, and the live session tells you before you commit to anything.</p>
+    <p class="reviewed">Last reviewed November 2026. Menu names and prices change; if something here no longer matches what you see, trust your device's own instructions and tell us at <a href="mailto:hello@hardwareclub.org">hello@hardwareclub.org</a>.</p>
+    <aside class="note-card">
+      <strong>Have hardware you're done with?</strong> <a href="/#donate">Offer it to Hardware Club</a>. We're an independent project, not a nonprofit, so donations aren't tax-deductible.
+    </aside>
+    <p><a href="/resources">&larr; All resources</a></p>
+  </div>
+</main>
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-brand">
+      <svg class="mark" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="11" y="11" width="26" height="26" rx="6"/><path d="M18 11V6M24 11V6M30 11V6M18 42V37M24 42V37M30 42V37M11 18H6M11 24H6M11 30H6M42 18H37M42 24H37M42 30H37"/><path d="M30.5 20.3A7.5 7.5 0 1 0 31.1 26.6"/><path d="M27.7 27.9L31.2 26.4L32.7 29.9"/></svg>
+      <span>Hardware Club · an independent project in Metro Detroit · hello@hardwareclub.org</span>
+    </div>
+    <div class="footer-links">
+      <a href="/resources">Resources</a>
+      <a href="/privacy">Privacy</a>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

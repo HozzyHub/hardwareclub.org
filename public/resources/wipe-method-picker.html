@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#07050c">
+<title>Data-wipe method picker: how to erase your device · Hardware Club</title>
+<meta name="description" content="Pick your device and drive type and get the right steps for erasing it before you donate, sell or recycle it.">
+<link rel="canonical" href="https://hardwareclub.org/resources/wipe-method-picker">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Data-wipe method picker: how to erase your device · Hardware Club">
+<meta property="og:description" content="Pick your device and drive type and get the right steps for erasing it before you donate, sell or recycle it.">
+<meta property="og:url" content="https://hardwareclub.org/resources/wipe-method-picker">
+<meta property="og:image" content="https://hardwareclub.org/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Hardware Club: old tech, new purpose.">
+<meta property="og:site_name" content="Hardware Club">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Data-wipe method picker: how to erase your device · Hardware Club">
+<meta name="twitter:description" content="Pick your device and drive type and get the right steps for erasing it before you donate, sell or recycle it.">
+<meta name="twitter:image" content="https://hardwareclub.org/og.png">
+<meta name="twitter:image:alt" content="Hardware Club: old tech, new purpose.">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="alternate icon" href="/favicon.ico">
+<link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-nav">
+  <div class="container">
+    <a class="brand" href="/">
+      <svg class="mark" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="11" y="11" width="26" height="26" rx="6"/><path d="M18 11V6M24 11V6M30 11V6M18 42V37M24 42V37M30 42V37M11 18H6M11 24H6M11 30H6M42 18H37M42 24H37M42 30H37"/><path d="M30.5 20.3A7.5 7.5 0 1 0 31.1 26.6"/><path d="M27.7 27.9L31.2 26.4L32.7 29.9"/></svg>
+      <span>Hardware Club</span>
+    </a>
+    <nav class="nav-links" aria-label="Primary">
+      <a class="nav-link" href="/resources" aria-current="page">Resources</a>
+      <a class="nav-link" href="/#faq">FAQ</a>
+      <a class="btn btn-primary" href="/#donate">Donate hardware</a>
+    </nav>
+  </div>
+</header>
+<main id="main" class="resource-page">
+  <div class="container">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/resources">Resources</a> <span aria-hidden="true">/</span> <span>Data-wipe method picker</span></nav>
+    <p class="eyebrow">Tool</p>
+    <h1>Data-wipe method picker</h1>
+    <p class="lede">Choose your device to see exactly how to erase it. Runs entirely in your browser.</p>
+
+    <form id="wipe-form" class="tool-form" data-tool="wipe">
+
+      <div class="field">
+        <label for="wdevice">Device</label>
+        <select id="wdevice" name="wdevice">
+          <option value="windows">Windows PC or laptop</option>
+          <option value="mac">Mac</option>
+          <option value="iphone">iPhone or iPad</option>
+          <option value="android">Android phone or tablet</option>
+          <option value="chromebook">Chromebook</option>
+          <option value="linux">Linux PC</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="wdrive">Drive type (computers only)</label>
+        <select id="wdrive" name="wdrive">
+          <option value="unknown">I'm not sure</option>
+          <option value="ssd">SSD or NVMe</option>
+          <option value="hdd">Spinning hard disk</option>
+        </select>
+      </div>
+      <label class="checkbox-single"><input type="checkbox" id="wbroken" name="wbroken"> <span>It won't power on or the drive can't be read</span></label>
+      <button class="visually-hidden" type="submit">Show recommendation</button>
+    </form>
+    <div id="wipe-result" class="tool-result" role="status" aria-live="polite" hidden></div>
+    <noscript>
+      <div class="note-card">This tool needs JavaScript. The <a href="/resources/wipe-a-drive-before-donating">wipe guide</a> and the <a href="/resources/downloads">cheat sheet</a> cover every device type.</div>
+    </noscript>
+    <p class="muted-text">Not sure how to tell? On a computer, search the model number plus "SSD or HDD". Full background in the <a href="/resources/wipe-a-drive-before-donating">wipe guide</a>.</p>
+  </div>
+</main>
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-brand">
+      <svg class="mark" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="11" y="11" width="26" height="26" rx="6"/><path d="M18 11V6M24 11V6M30 11V6M18 42V37M24 42V37M30 42V37M11 18H6M11 24H6M11 30H6M42 18H37M42 24H37M42 30H37"/><path d="M30.5 20.3A7.5 7.5 0 1 0 31.1 26.6"/><path d="M27.7 27.9L31.2 26.4L32.7 29.9"/></svg>
+      <span>Hardware Club · an independent project in Metro Detroit · hello@hardwareclub.org</span>
+    </div>
+    <div class="footer-links">
+      <a href="/resources">Resources</a>
+      <a href="/privacy">Privacy</a>
+    </div>
+  </div>
+</footer>
+<script src="/tools.js" defer></script>
+</body>
+</html>

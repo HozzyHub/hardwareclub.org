@@ -1,0 +1,28 @@
+HARDWARE CLUB: REFURBISHED BUYING CHECKLIST
+hardwareclub.org/resources/buying-refurbished-hardware
+
+ASK THE SELLER
+[ ] Return window? Warranty? Who honors it?
+[ ] What does the condition grade mean, in writing?
+[ ] Battery replaced or tested? What capacity?
+[ ] Drive securely wiped, fresh OS installed?
+[ ] Free of account locks, firmware passwords, management profiles?
+[ ] Photos of the actual item?
+
+SPECS WORTH PAYING FOR
+[ ] SSD
+[ ] 8 GB memory or more (16 GB for heavy multitasking)
+[ ] Recent processor your target OS supports
+[ ] Business-class model (often sturdier, easier to repair)
+
+TEST IN THE FIRST WEEK
+[ ] Screen: dead pixels, discoloration, brightness
+[ ] Keyboard, trackpad, ports, speakers, mic, camera
+[ ] Battery report and charging
+[ ] Storage health (SMART) and a full memory test
+[ ] Specs in system info match the listing
+
+RED FLAGS
+- No returns or vague "as is" language
+- Price far below similar listings
+- Seller cannot say whether the device is locked to another account

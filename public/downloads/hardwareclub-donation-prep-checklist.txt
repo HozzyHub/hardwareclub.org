@@ -1,0 +1,27 @@
+HARDWARE CLUB: DONATION PREP CHECKLIST
+hardwareclub.org/resources/prepare-a-laptop-for-donation
+
+Device: ______________________  Model: ______________________
+
+[ ] Back up everything I want to keep, and check the copy opens
+[ ] Signed out of accounts (Apple ID / Find My, Google, Microsoft)
+[ ] Removed firmware or BIOS password
+[ ] Erased the device, or removed the drive to keep
+      (hardwareclub.org/resources/wipe-a-drive-before-donating)
+[ ] Removed SIM and memory cards
+[ ] Found the charger or power adapter
+[ ] Tested: powers on / battery holds charge / screen / keyboard /
+    trackpad / Wi-Fi / ports
+[ ] Wrote down what is broken
+[ ] Noted make, model, memory, storage, and approximate age
+[ ] Battery is NOT swollen, bulging or leaking
+    (if it is, do not bring it: hardwareclub.org/resources/batteries-and-e-waste-safety)
+[ ] Removed personal stickers, tags and items stored inside
+[ ] Packed safely
+[ ] Submitted the donation form: hardwareclub.org/#donate
+
+We do not accept: CRT monitors and TVs, printers, kitchen and household
+appliances, loose or swollen batteries.
+
+Hardware Club is an independent project, not a nonprofit. Donations are not
+tax-deductible.

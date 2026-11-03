@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#07050c">
+<title>How to upgrade RAM and swap in an SSD · Hardware Club</title>
+<meta name="description" content="Step-by-step guidance for identifying your laptop or desktop, buying compatible RAM and an SSD, cloning or reinstalling, and avoiding the common mistakes.">
+<link rel="canonical" href="https://hardwareclub.org/resources/upgrade-ram-and-ssd">
+<meta property="og:type" content="website">
+<meta property="og:title" content="How to upgrade RAM and swap in an SSD · Hardware Club">
+<meta property="og:description" content="Step-by-step guidance for identifying your laptop or desktop, buying compatible RAM and an SSD, cloning or reinstalling, and avoiding the common mistakes.">
+<meta property="og:url" content="https://hardwareclub.org/resources/upgrade-ram-and-ssd">
+<meta property="og:image" content="https://hardwareclub.org/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Hardware Club: old tech, new purpose.">
+<meta property="og:site_name" content="Hardware Club">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="How to upgrade RAM and swap in an SSD · Hardware Club">
+<meta name="twitter:description" content="Step-by-step guidance for identifying your laptop or desktop, buying compatible RAM and an SSD, cloning or reinstalling, and avoiding the common mistakes.">
+<meta name="twitter:image" content="https://hardwareclub.org/og.png">
+<meta name="twitter:image:alt" content="Hardware Club: old tech, new purpose.">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="alternate icon" href="/favicon.ico">
+<link rel="stylesheet" href="/styles.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Upgrade memory and swap in an SSD",
+  "description": "Step-by-step guidance for identifying your laptop or desktop, buying compatible RAM and an SSD, cloning or reinstalling, and avoiding the common mistakes.",
+  "datePublished": "2026-11-03",
+  "author": {
+    "@type": "Organization",
+    "name": "Hardware Club"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Hardware Club",
+    "url": "https://hardwareclub.org/"
+  },
+  "mainEntityOfPage": "https://hardwareclub.org/resources/upgrade-ram-and-ssd"
+}
+</script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-nav">
+  <div class="container">
+    <a class="brand" href="/">
+      <svg class="mark" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="11" y="11" width="26" height="26" rx="6"/><path d="M18 11V6M24 11V6M30 11V6M18 42V37M24 42V37M30 42V37M11 18H6M11 24H6M11 30H6M42 18H37M42 24H37M42 30H37"/><path d="M30.5 20.3A7.5 7.5 0 1 0 31.1 26.6"/><path d="M27.7 27.9L31.2 26.4L32.7 29.9"/></svg>
+      <span>Hardware Club</span>
+    </a>
+    <nav class="nav-links" aria-label="Primary">
+      <a class="nav-link" href="/resources" aria-current="page">Resources</a>
+      <a class="nav-link" href="/#faq">FAQ</a>
+      <a class="btn btn-primary" href="/#donate">Donate hardware</a>
+    </nav>
+  </div>
+</header>
+<main id="main" class="resource-page">
+  <div class="container">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/resources">Resources</a> <span aria-hidden="true">/</span> <span>Upgrade RAM and SSD</span></nav>
+    <p class="eyebrow">Guide · Intermediate</p>
+    <h1>Upgrade memory and swap in an SSD</h1>
+    <p class="lede">The two upgrades that make an old computer feel new again, and how to do them without breaking anything.</p>
+
+    <h2>Before you buy anything</h2>
+    <ol>
+      <li><strong>Identify the exact model.</strong> It's printed on the underside label or shown in the system information page. Search the model number plus "service manual" or "upgrade". The maker's manual and <a href="https://www.ifixit.com/">iFixit</a> guides show how to open it.</li>
+      <li><strong>Check if parts are replaceable.</strong> Many thin laptops and nearly all recent Macs solder the memory to the board, and some solder or lock the storage.</li>
+      <li><strong>Match the memory type.</strong> DDR3, DDR4 and DDR5 are not interchangeable, and laptop (SO-DIMM) and desktop (DIMM) sticks are different sizes. Check how many slots you have and the maximum supported.</li>
+      <li><strong>Match the storage connector.</strong> A 2.5-inch SATA SSD fits where a laptop hard disk went. Some machines take M.2 (SATA or NVMe, which differ). The service manual tells you which.</li>
+    </ol>
+
+    <h2>The swap</h2>
+    <ol>
+      <li><strong>Back up.</strong> Then decide whether to clone the old drive or do a fresh install (fresh is usually cleaner on an old machine).</li>
+      <li><strong>Power off, unplug, and remove the battery</strong> if it's removable. Hold the power button for ten seconds to drain residual charge.</li>
+      <li><strong>Ground yourself.</strong> Touch bare metal on the case before touching components, and hold boards and sticks by their edges.</li>
+      <li><strong>Swap the part.</strong> Memory clicks in at an angle and snaps flat. Drives slide into their connector and fasten with a small screw or caddy.</li>
+      <li><strong>Reassemble, boot,</strong> and check in the system information that the new memory and drive show up.</li>
+      <li><strong>Install the operating system</strong> from a USB drive (see the <a href="/resources/linux-on-an-old-pc">Linux guide</a> for a free option), or restore your clone.</li>
+    </ol>
+
+    <h2>Test before you trust it</h2>
+    <ul>
+      <li>Run <a href="https://www.memtest.org/">MemTest86+</a> for a full pass to catch bad memory.</li>
+      <li>Check a drive's health with SMART data (<a href="https://www.smartmontools.org/">smartmontools</a> or the built-in tools). Used drives with reallocated sectors should not hold anything important.</li>
+    </ul>
+
+    <h2>Common mistakes</h2>
+    <ul>
+      <li>Buying the wrong memory generation or form factor.</li>
+      <li>Forcing a stick that isn't aligned with its notch.</li>
+      <li>Losing tiny screws: sort them into a muffin tin or an egg carton.</li>
+      <li>Pulling a swollen battery. If the case is bulging, stop and read the <a href="/resources/batteries-and-e-waste-safety">battery guide</a>.</li>
+    </ul>
+    <p class="reviewed">Last reviewed November 2026. Menu names and prices change; if something here no longer matches what you see, trust your device's own instructions and tell us at <a href="mailto:hello@hardwareclub.org">hello@hardwareclub.org</a>.</p>
+    <aside class="note-card">
+      <strong>Have hardware you're done with?</strong> <a href="/#donate">Offer it to Hardware Club</a>. We're an independent project, not a nonprofit, so donations aren't tax-deductible.
+    </aside>
+    <p><a href="/resources">&larr; All resources</a></p>
+  </div>
+</main>
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-brand">
+      <svg class="mark" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="11" y="11" width="26" height="26" rx="6"/><path d="M18 11V6M24 11V6M30 11V6M18 42V37M24 42V37M30 42V37M11 18H6M11 24H6M11 30H6M42 18H37M42 24H37M42 30H37"/><path d="M30.5 20.3A7.5 7.5 0 1 0 31.1 26.6"/><path d="M27.7 27.9L31.2 26.4L32.7 29.9"/></svg>
+      <span>Hardware Club · an independent project in Metro Detroit · hello@hardwareclub.org</span>
+    </div>
+    <div class="footer-links">
+      <a href="/resources">Resources</a>
+      <a href="/privacy">Privacy</a>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
