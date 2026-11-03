@@ -1,0 +1,40 @@
+HARDWARE CLUB: DATA-WIPE CHEAT SHEET
+hardwareclub.org/resources/wipe-a-drive-before-donating
+
+ALWAYS FIRST: back up, then sign out of accounts. Menu names vary by version.
+
+WINDOWS 10/11
+  Settings > System > Recovery > Reset this PC > Remove everything.
+  Choose the option to clean the drive if offered.
+  SSD: turn on device encryption / BitLocker first, then reset.
+
+MAC
+  Sign out of iCloud and turn off Find My.
+  Apple silicon or T2 Mac (macOS Monterey or later):
+    System Settings > General > Transfer or Reset > Erase All Content and Settings.
+  Older Intel Macs: restart into Recovery, erase the disk in Disk Utility, reinstall macOS.
+
+IPHONE / IPAD
+  Turn off Find My, sign out of Apple ID.
+  Settings > General > Transfer or Reset > Erase All Content and Settings.
+
+ANDROID
+  Remove Google account first (avoids Factory Reset Protection lockout).
+  Settings > System > Reset options > Erase all data (factory reset).
+  Remove SIM and SD cards.
+
+CHROMEBOOK
+  Sign out, then Settings > Reset settings > Powerwash.
+  Remove from any school or work management first.
+
+LINUX / ANY PC WITH A HARD DISK (HDD)
+  Boot a live USB with nwipe and run a one-pass zero overwrite.
+
+LINUX / ANY PC WITH AN SSD OR NVMe
+  Use the maker's secure-erase tool, or the drive's sanitize command.
+  Do not rely on multi-pass overwrites.
+
+WON'T POWER ON / DRIVE UNREADABLE
+  Remove the drive and keep it, or destroy it physically.
+
+Reference: NIST SP 800-88 Rev. 1 (csrc.nist.gov/pubs/sp/800/88/r1/final)

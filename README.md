@@ -13,6 +13,12 @@ included. HSTS is sent only on the apex. There is no `public/_headers` file.
 A monthly Cron Trigger also purges old submissions (see
 [Submission retention](#submission-retention)).
 
+## Resources section
+
+`/resources` (guides, tools, downloads, local directory) is generated: edit
+`scripts/resources/*.mjs` and run `npm run build`. Output under
+`public/resources/`, `public/downloads/` and `public/sitemap.xml` is committed.
+
 ## Local development
 
 ```sh
