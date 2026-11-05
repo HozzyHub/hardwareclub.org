@@ -36,7 +36,7 @@ submitted locally will verify successfully without any real Turnstile setup.
 
 ```sh
 npm test    # vitest, running against a real Workers runtime (miniflare)
-npm run check   # typecheck + html-validate + internal link check
+npm run check   # typecheck + html-validate + link check + resource-tool check
 npm run build   # regenerates /resources, downloads, sitemap and public/og.png
 ```
 
@@ -46,8 +46,8 @@ Deployment is handled by Cloudflare Workers Builds, connected to this repo in
 the Cloudflare dashboard. On merge to `main` it runs `npm run build` then
 `npx wrangler deploy`. There is no GitHub Actions deploy workflow; CI
 (`.github/workflows/ci.yml`) only runs `npm ci && npm test && npm run check`
-on pull requests, then reruns `scripts/build-resources.mjs` and fails if the committed
-`/resources`, downloads or sitemap output differs (`og.png` is not checked:
+on pull requests, then reruns `scripts/build-resources.mjs` and fails if the
+committed `/resources`, downloads or sitemap output differs (`og.png` is not checked:
 its PNG bytes vary by platform).
 
 ## Submission retention
@@ -84,7 +84,11 @@ npx wrangler secret put HC_FAIL_URL
 
 The Worker posts only `d1-insert` or `notify` to that URL when storing a
 submission or sending its notification fails. Keep the URL private. Without
-the secret, the Worker retains its error log but sends no failure ping.
+the secret, the Worker retains its error log but sends no failure ping. If
+the ping itself fails (times out after 5 seconds, or healthchecks.io answers
+with a non-2xx status, e.g. 404 for a deleted check), the Worker logs
+`Failure alert ping for <kind> ...` so a broken alert channel still shows up
+in Workers Logs.
 
 healthchecks.io alerts only when the check changes state, so while it stays
 down, later failure pings send no new alert. After handling an alert, reset the
