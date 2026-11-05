@@ -103,6 +103,11 @@ describe("GET /", () => {
     expect(html).toMatch(/<noscript>[\s\S]*mailto:hello@hardwareclub\.org[\s\S]*<\/noscript>/);
   });
 
+  it("preconnects to the Turnstile origin so the widget loads sooner", async () => {
+    const html = await (await SELF.fetch("https://hardwareclub.org/")).text();
+    expect(html).toContain('<link rel="preconnect" href="https://challenges.cloudflare.com">');
+  });
+
   it("serves the page without cache validators so a site key change is never masked by a 304", async () => {
     const response = await SELF.fetch("https://hardwareclub.org/");
     expect(response.status).toBe(200);
