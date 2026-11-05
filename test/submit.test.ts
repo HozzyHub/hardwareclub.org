@@ -117,6 +117,21 @@ describe("POST /api/submit", () => {
     expect(await submissionRows()).toHaveLength(0);
   });
 
+  it("renders the no-JS error page with the site stylesheet and noindex", async () => {
+    rateLimiter.limit = vi.fn().mockResolvedValue({ success: false });
+    const response = await SELF.fetch("https://hardwareclub.org/api/submit", {
+      method: "POST",
+      headers: { "content-type": "application/x-www-form-urlencoded" },
+      body: buildFormBody().toString(),
+    });
+
+    const html = await response.text();
+    expect(html).toContain('<link rel="stylesheet" href="/styles.css">');
+    expect(html).toContain('<meta name="viewport"');
+    expect(html).toContain('<meta name="robots" content="noindex">');
+    expect(html).not.toMatch(/<script|style=/);
+  });
+
   it("allows a local request when the binding is absent", async () => {
     const localEnv = { ...env, SUBMIT_RATE_LIMIT: undefined } as unknown as Env;
     const request = new Request("http://localhost/api/submit", {
