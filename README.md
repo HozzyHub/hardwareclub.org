@@ -37,7 +37,7 @@ submitted locally will verify successfully without any real Turnstile setup.
 ```sh
 npm test    # vitest, running against a real Workers runtime (miniflare)
 npm run check   # typecheck + html-validate + internal link check
-npm run build   # regenerates public/og.png from an SVG (fast, no bundling)
+npm run build   # regenerates /resources, downloads, sitemap and public/og.png
 ```
 
 ## Deployment
@@ -46,7 +46,9 @@ Deployment is handled by Cloudflare Workers Builds, connected to this repo in
 the Cloudflare dashboard. On merge to `main` it runs `npm run build` then
 `npx wrangler deploy`. There is no GitHub Actions deploy workflow; CI
 (`.github/workflows/ci.yml`) only runs `npm ci && npm test && npm run check`
-on pull requests.
+on pull requests, then reruns `scripts/build-resources.mjs` and fails if the committed
+`/resources`, downloads or sitemap output differs (`og.png` is not checked:
+its PNG bytes vary by platform).
 
 ## Submission retention
 
