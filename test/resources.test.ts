@@ -5,6 +5,7 @@ const PAGES = [
   "/resources",
   "/resources/wipe-a-drive-before-donating",
   "/resources/prepare-a-laptop-for-donation",
+  "/resources/find-your-computer-specs",
   "/resources/repair-or-replace-old-computer",
   "/resources/upgrade-ram-and-ssd",
   "/resources/linux-on-an-old-pc",
