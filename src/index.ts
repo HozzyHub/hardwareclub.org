@@ -27,6 +27,13 @@ export default {
       response = Response.json({ ok: !problem }, { status: problem ? 503 : 200 });
     } else if (url.pathname === "/api/submit" && request.method === "POST") {
       response = await handleSubmit(request, env, ctx);
+    } else if (url.pathname === "/api/submit") {
+      // Without this, a GET falls through to the assets 404 page, which hides
+      // that the endpoint exists but only accepts POST.
+      response = new Response("Method Not Allowed", {
+        status: 405,
+        headers: { allow: "POST", "content-type": "text/plain; charset=utf-8" },
+      });
     } else if (url.pathname === "/" || url.pathname === "/index.html") {
       response = await serveIndex(request, env.ASSETS, env.TURNSTILE_SITEKEY);
     } else {

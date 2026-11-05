@@ -8,7 +8,11 @@ const CSP = [
   "img-src 'self' data:",
   "font-src 'self'",
   "connect-src 'self'",
+  "object-src 'none'",
   "base-uri 'none'",
+  // X-Frame-Options covers older browsers; frame-ancestors is the CSP
+  // equivalent and is not inherited from default-src.
+  "frame-ancestors 'none'",
   "form-action 'self'",
 ].join("; ");
 

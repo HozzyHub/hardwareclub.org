@@ -111,6 +111,23 @@ describe("GET /", () => {
     expect(response.headers.get("x-content-type-options")).toBe("nosniff");
     expect(response.headers.get("content-security-policy")).toContain("challenges.cloudflare.com");
   });
+
+  it("forbids framing and plugins in the CSP", async () => {
+    const response = await SELF.fetch("https://hardwareclub.org/");
+    const csp = response.headers.get("content-security-policy") ?? "";
+    expect(csp).toContain("frame-ancestors 'none'");
+    expect(csp).toContain("object-src 'none'");
+  });
+});
+
+describe("non-POST /api/submit", () => {
+  it.each(["GET", "PUT", "DELETE"])("answers %s with 405 and Allow: POST", async (method) => {
+    const response = await SELF.fetch("https://hardwareclub.org/api/submit", { method });
+
+    expect(response.status).toBe(405);
+    expect(response.headers.get("allow")).toBe("POST");
+    expect(response.headers.get("x-frame-options")).toBe("DENY");
+  });
 });
 
 describe("serveIndex", () => {
