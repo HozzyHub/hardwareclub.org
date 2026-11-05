@@ -15,11 +15,11 @@ jobs:
       - run: npm ci
       - run: npm test
       - run: npm run check
-      # Generated output (resources pages, downloads, sitemap, og.png) is
-      # committed; fail if it is out of step with its sources.
-      - name: Check generated files are up to date
+      # The resources pages, downloads and sitemap are generated but
+      # committed; fail if they are out of step with scripts/resources/.
+      # og.png is left out: resvg's PNG bytes differ between platforms.
+      - name: Check generated resources are up to date
         run: |
-          npm run build
-          git status --porcelain
-          git diff --exit-code
-          test -z "$(git status --porcelain)"
+          node scripts/build-resources.mjs
+          git status --porcelain -- public
+          test -z "$(git status --porcelain -- public)"
