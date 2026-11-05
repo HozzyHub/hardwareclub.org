@@ -184,13 +184,21 @@
     var form = document.getElementById(formId);
     var box = document.getElementById(boxId);
     if (!form || !box) return;
+    var shown = null;
     function update() {
       var values = {};
       Array.prototype.forEach.call(form.elements, function (field) {
         if (!field.name) return;
         values[field.name] = field.type === "checkbox" ? field.checked : field.value;
       });
-      render(box, compute(values));
+      // The result box is an aria-live region, and a select fires both input
+      // and change: only re-render when the advice actually changes, so screen
+      // readers don't hear the same recommendation repeated.
+      var result = compute(values);
+      var key = JSON.stringify(result);
+      if (key === shown) return;
+      shown = key;
+      render(box, result);
     }
     form.addEventListener("input", update);
     form.addEventListener("change", update);
