@@ -4,7 +4,7 @@ import path from "node:path";
 import { Resvg } from "@resvg/resvg-js";
 
 const root = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
-const fontsDir = path.join(root, "public", "fonts");
+const fontsDir = path.join(root, "scripts", "fonts");
 const outFile = path.join(root, "public", "og.png");
 
 // Keep in step with the --bg/--ink/--muted/--accent tokens in public/styles.css.
