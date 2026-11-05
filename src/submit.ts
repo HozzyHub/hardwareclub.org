@@ -36,14 +36,31 @@ function errorResponse(errors: ValidationErrors, status: number, asJson: boolean
   const items = Object.values(errors)
     .map((message) => `<li>${escapeHtml(message)}</li>`)
     .join("");
+  // Same chrome as /thanks so a donor without JavaScript isn't dropped onto
+  // an unstyled page. noindex: this is a transient response, not content.
   const html = `<!doctype html>
 <html lang="en">
-<head><meta charset="utf-8"><title>There was a problem · Hardware Club</title></head>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#07050c">
+<meta name="robots" content="noindex">
+<title>There was a problem · Hardware Club</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/styles.css">
+</head>
 <body>
-<main>
-<h1>There was a problem with your submission</h1>
-<ul>${items}</ul>
-<p><a href="/#donate">Back to the form</a></p>
+<header class="site-nav">
+  <div class="container">
+    <a class="brand" href="/"><span>Hardware Club</span></a>
+  </div>
+</header>
+<main id="main" class="simple-page">
+  <div class="container">
+    <h1>There was a problem with your submission</h1>
+    <ul>${items}</ul>
+    <p><a href="/#donate">&larr; Back to the form</a></p>
+  </div>
 </main>
 </body>
 </html>`;
