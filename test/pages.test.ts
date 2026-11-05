@@ -174,3 +174,18 @@ describe("serveIndex", () => {
     expect(response.headers.get("content-type")).toBe("text/html; charset=utf-8");
   });
 });
+
+describe("security.txt", () => {
+  it("serves an RFC 9116 security.txt with a contact and an expiry no more than a year out", async () => {
+    const response = await SELF.fetch("https://hardwareclub.org/.well-known/security.txt");
+
+    expect(response.status).toBe(200);
+    expect(response.headers.get("content-type")).toContain("text/plain");
+    const text = await response.text();
+    expect(text).toMatch(/^Contact: mailto:hello@hardwareclub\.org$/m);
+    expect(text).toMatch(/^Canonical: https:\/\/hardwareclub\.org\/\.well-known\/security\.txt$/m);
+    const expires = text.match(/^Expires: (.+)$/m)?.[1];
+    expect(expires).toBeDefined();
+    expect(Number.isNaN(Date.parse(expires!))).toBe(false);
+  });
+});

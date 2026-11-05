@@ -123,6 +123,12 @@ Before the first real deploy is useful in production:
 5. If the account has Cloudflare Access enabled, make sure the public
    hostname is excluded so visitors aren't asked to authenticate.
 
+## security.txt
+
+`public/.well-known/security.txt` (RFC 9116) points security reports at
+`hello@hardwareclub.org`. Its `Expires` field must be renewed before it passes
+(currently 2027-11-01); RFC 9116 recommends keeping it under a year out.
+
 ## Project layout
 
 - `public/` — static HTML/CSS/JS pages, fonts, and images.
