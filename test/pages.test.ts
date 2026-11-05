@@ -244,3 +244,12 @@ describe("404 page", () => {
     expect(html).toContain('href="/resources"');
   });
 });
+
+describe("/thanks", () => {
+  it("points donors at the prep guides while they wait", async () => {
+    const html = await (await SELF.fetch("https://hardwareclub.org/thanks")).text();
+    expect(html).toContain('href="/resources/back-up-before-you-donate"');
+    expect(html).toContain('href="/resources/wipe-a-drive-before-donating"');
+    expect(html).toContain('href="/resources/batteries-and-e-waste-safety"');
+  });
+});
