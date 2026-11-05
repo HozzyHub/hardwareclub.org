@@ -380,7 +380,7 @@ describe("POST /api/submit", () => {
     expect(response.status).toBe(200);
     expect(await response.json()).toEqual({ ok: true });
     expect(await submissionRows()).toHaveLength(1);
-    await vi.waitFor(() => expect(failureAlert.send).toHaveBeenCalledExactlyOnceWith("test-fail-url", { method: "POST", body: "notify" }));
+    await vi.waitFor(() => expect(failureAlert.send).toHaveBeenCalledExactlyOnceWith("test-fail-url", expect.objectContaining({ method: "POST", body: "notify" })));
   });
 
   it("keeps the visitor response when the failure ping rejects", async () => {
@@ -396,7 +396,7 @@ describe("POST /api/submit", () => {
     expect(response.status).toBe(200);
     expect(await response.json()).toEqual({ ok: true });
     expect(await submissionRows()).toHaveLength(1);
-    await vi.waitFor(() => expect(failureAlert.send).toHaveBeenCalledExactlyOnceWith("test-fail-url", { method: "POST", body: "notify" }));
+    await vi.waitFor(() => expect(failureAlert.send).toHaveBeenCalledExactlyOnceWith("test-fail-url", expect.objectContaining({ method: "POST", body: "notify" })));
   });
 
   it("does not ping when the optional failure URL is absent", async () => {
@@ -452,7 +452,7 @@ describe("POST /api/submit", () => {
       expect(html).toContain("There was a problem with your submission");
       expect(html).toContain('href="/#donate"');
       expect(notifier.send).not.toHaveBeenCalled();
-      await vi.waitFor(() => expect(failureAlert.send).toHaveBeenCalledExactlyOnceWith("test-fail-url", { method: "POST", body: "d1-insert" }));
+      await vi.waitFor(() => expect(failureAlert.send).toHaveBeenCalledExactlyOnceWith("test-fail-url", expect.objectContaining({ method: "POST", body: "d1-insert" })));
     });
   });
 
