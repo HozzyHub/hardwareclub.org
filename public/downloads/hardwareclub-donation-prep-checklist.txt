@@ -4,6 +4,9 @@ hardwareclub.org/resources/prepare-a-laptop-for-donation
 Device: ______________________  Model: ______________________
 
 [ ] Back up everything I want to keep, and check the copy opens
+      (hardwareclub.org/resources/back-up-before-you-donate)
+[ ] Moved two-factor (authenticator) codes to another device, and
+    signed in once with them
 [ ] Signed out of accounts (Apple ID / Find My, Google, Microsoft)
 [ ] Removed firmware or BIOS password
 [ ] Erased the device, or removed the drive to keep
@@ -14,6 +17,7 @@ Device: ______________________  Model: ______________________
     trackpad / Wi-Fi / ports
 [ ] Wrote down what is broken
 [ ] Noted make, model, memory, storage, and approximate age
+      (hardwareclub.org/resources/find-your-computer-specs)
 [ ] Battery is NOT swollen, bulging or leaking
     (if it is, do not bring it: hardwareclub.org/resources/batteries-and-e-waste-safety)
 [ ] Removed personal stickers, tags and items stored inside
