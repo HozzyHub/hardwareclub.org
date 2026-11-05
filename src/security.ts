@@ -21,7 +21,13 @@ export function withSecurityHeaders(response: Response, hostname: string): Respo
   headers.set("Content-Security-Policy", CSP);
   headers.set("X-Content-Type-Options", "nosniff");
   headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
-  headers.set("Permissions-Policy", "camera=(), microphone=(), geolocation=()");
+  headers.set(
+    "Permissions-Policy",
+    "camera=(), microphone=(), geolocation=(), payment=(), usb=(), serial=(), hid=(), bluetooth=(), browsing-topics=()",
+  );
+  // Isolates the browsing context from cross-origin openers; Turnstile runs in
+  // an iframe, not a popup, so it is unaffected.
+  headers.set("Cross-Origin-Opener-Policy", "same-origin");
   headers.set("X-Frame-Options", "DENY");
   // HSTS is scoped to the apex only; includeSubDomains/preload are
   // deliberately off so other subdomains aren't pinned to HTTPS.
