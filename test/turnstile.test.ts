@@ -117,6 +117,25 @@ describe("turnstile.verify against siteverify", () => {
     expect(await turnstile.verify("token", "secret", null)).toBe(false);
   });
 
+  it("returns false without calling siteverify when the token is longer than 2048 characters", async () => {
+    const spy = stubSiteverify(Response.json({ success: true }));
+    expect(await turnstile.verify("x".repeat(2049), "secret", null)).toBe(false);
+    expect(spy).not.toHaveBeenCalled();
+  });
+
+  it("bounds the siteverify request with an abort signal", async () => {
+    const spy = stubSiteverify(Response.json({ success: true }));
+    await turnstile.verify("token", "secret", null);
+    expect(spy.mock.calls[0]![1]?.signal).toBeInstanceOf(AbortSignal);
+  });
+
+  it("returns false instead of throwing when the siteverify request times out", async () => {
+    vi.spyOn(globalThis, "fetch").mockRejectedValue(new DOMException("The operation was aborted due to timeout", "TimeoutError"));
+    const error = vi.spyOn(console, "error").mockImplementation(() => {});
+    expect(await turnstile.verify("token", "secret", null)).toBe(false);
+    expect(error).toHaveBeenCalledWith("Turnstile siteverify request failed", expect.anything());
+  });
+
   it("returns false instead of throwing when the siteverify request fails", async () => {
     stubSiteverify(new Error("connect ECONNREFUSED"));
     expect(await turnstile.verify("token", "secret", null)).toBe(false);

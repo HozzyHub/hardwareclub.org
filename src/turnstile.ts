@@ -24,6 +24,12 @@ const TEST_SECRETS = new Set([
 // siteverify error codes that mean our setup is wrong, not the visitor's token.
 const CONFIG_ERROR_CODES = new Set(["missing-input-secret", "invalid-input-secret", "bad-request"]);
 
+// Turnstile tokens are at most 2048 characters; siteverify rejects longer ones.
+const MAX_TOKEN_LENGTH = 2048;
+// A hung siteverify would otherwise hold the donor's request open until the
+// Workers runtime gives up; fail closed (as for any other network error).
+const SITEVERIFY_TIMEOUT_MS = 10_000;
+
 /** Thrown when siteverify says the problem is our configuration, not the visitor. */
 export class TurnstileConfigError extends Error {}
 
@@ -46,7 +52,7 @@ export function turnstileConfigProblem(
 }
 
 async function verifyWithCloudflare(token: string, secret: string, ip: string | null): Promise<boolean> {
-  if (!token) return false;
+  if (!token || token.length > MAX_TOKEN_LENGTH) return false;
 
   const body = new URLSearchParams();
   body.set("secret", secret);
@@ -58,6 +64,7 @@ async function verifyWithCloudflare(token: string, secret: string, ip: string | 
     const res = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
       method: "POST",
       body,
+      signal: AbortSignal.timeout(SITEVERIFY_TIMEOUT_MS),
     });
 
     if (!res.ok) return false;
