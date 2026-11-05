@@ -10,11 +10,12 @@
   "scripts": {
     "dev": "wrangler dev",
     "test": "vitest run",
-    "check": "npm run check:types && npm run check:html && npm run check:links && npm run check:tools",
+    "check": "npm run check:types && npm run check:html && npm run check:links && npm run check:tools && npm run check:form",
     "check:types": "tsc --noEmit",
     "check:html": "html-validate \"public/**/*.html\"",
     "check:links": "node scripts/check-links.mjs",
     "check:tools": "node scripts/check-tools.mjs",
+    "check:form": "node scripts/check-form.mjs",
     "build": "node scripts/build-resources.mjs && node scripts/build-og.mjs",
     "deploy": "wrangler deploy"
   },
