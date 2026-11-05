@@ -227,3 +227,15 @@ describe("security.txt", () => {
     expect(Number.isNaN(Date.parse(expires!))).toBe(false);
   });
 });
+
+describe("404 page", () => {
+  it("answers unknown paths with a 404, noindex, and links back into the site", async () => {
+    const response = await SELF.fetch("https://hardwareclub.org/no-such-page");
+
+    expect(response.status).toBe(404);
+    const html = await response.text();
+    expect(html).toContain('<meta name="robots" content="noindex">');
+    expect(html).toContain('href="/#donate"');
+    expect(html).toContain('href="/resources"');
+  });
+});
