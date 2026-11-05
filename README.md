@@ -36,7 +36,7 @@ submitted locally will verify successfully without any real Turnstile setup.
 
 ```sh
 npm test    # vitest, running against a real Workers runtime (miniflare)
-npm run check   # typecheck + html-validate + link check + resource-tool check
+npm run check   # typecheck + html-validate + link check + resource-tool and donate-form script checks
 npm run build   # regenerates /resources, downloads, sitemap and public/og.png
 ```
 
@@ -145,7 +145,7 @@ Before the first real deploy is useful in production:
 - `migrations/` — D1 schema migrations.
 - `test/` — Vitest tests running against the real Workers runtime.
 - `scripts/` — `build-resources.mjs` and `build-og.mjs` (part of
-  `npm run build`); `check-links.mjs` and `check-tools.mjs` (part of
-  `npm run check`; the latter runs `public/tools.js` against the generated
-  tool pages with a stub DOM). `build-favicon-ico.mjs` is a manual one-off,
+  `npm run build`); `check-links.mjs`, `check-tools.mjs` and
+  `check-form.mjs` (part of `npm run check`; the last two run `public/tools.js`
+  and `public/main.js` against a stub DOM). `build-favicon-ico.mjs` is a manual one-off,
   not run automatically.
