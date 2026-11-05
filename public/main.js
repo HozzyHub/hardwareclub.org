@@ -6,6 +6,19 @@
 
   var submitBtn = form.querySelector('button[type="submit"]');
   var statusBox = document.getElementById("form-status");
+  var submitLabel = submitBtn.textContent;
+
+  // Show that the request is in flight: the button would otherwise just go
+  // grey for the second or two the POST and Turnstile check take.
+  function setSending(sending) {
+    submitBtn.disabled = sending;
+    submitBtn.textContent = sending ? "Sending\u2026" : submitLabel;
+    if (sending) {
+      form.setAttribute("aria-busy", "true");
+    } else {
+      form.removeAttribute("aria-busy");
+    }
+  }
 
   var errorAnchors = {
     categories: '[name="categories[]"]',
@@ -76,10 +89,17 @@
     }
   }
 
+  // After a successful send the page navigates to /thanks with the button
+  // still disabled; re-enable it if Back restores the page from bfcache.
+  window.addEventListener("pageshow", function (event) {
+    if (event.persisted) setSending(false);
+  });
+
   form.addEventListener("submit", function (event) {
     event.preventDefault();
+    if (submitBtn.disabled) return;
     clearErrors();
-    submitBtn.disabled = true;
+    setSending(true);
 
     var formData = new FormData(form);
 
@@ -104,7 +124,7 @@
           return;
         }
 
-        submitBtn.disabled = false;
+        setSending(false);
         resetTurnstile();
 
         if (result.data && result.data.errors) {
@@ -118,7 +138,7 @@
         focusFirstError();
       })
       .catch(function () {
-        submitBtn.disabled = false;
+        setSending(false);
         resetTurnstile();
         showStatus("Something went wrong sending that. Please try again.");
         focusFirstError();
