@@ -125,6 +125,17 @@ describe("GET /", () => {
   });
 });
 
+describe("isolation headers", () => {
+  it.each(["/", "/privacy", "/api/health"])("sends COOP and a restrictive Permissions-Policy on %s", async (path) => {
+    const response = await SELF.fetch(`https://hardwareclub.org${path}`);
+    expect(response.headers.get("cross-origin-opener-policy")).toBe("same-origin");
+    const policy = response.headers.get("permissions-policy") ?? "";
+    for (const feature of ["camera", "microphone", "geolocation", "payment", "usb"]) {
+      expect(policy).toContain(`${feature}=()`);
+    }
+  });
+});
+
 describe("non-POST /api/submit", () => {
   it.each(["GET", "PUT", "DELETE"])("answers %s with 405 and Allow: POST", async (method) => {
     const response = await SELF.fetch("https://hardwareclub.org/api/submit", { method });
