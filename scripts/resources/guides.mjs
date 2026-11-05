@@ -75,6 +75,62 @@ export const guides = [
     <p>CRT monitors and TVs, printers, kitchen and household appliances, and loose or swollen batteries. The <a href="/resources/local-directory">local directory</a> lists where those can go instead.</p>`,
   },
   {
+    slug: "find-your-computer-specs",
+    crumb: "Find your specs",
+    title: "Find your computer's model, RAM and drive type",
+    h1: "Find your computer's model, memory and drive type",
+    level: "Beginner",
+    description:
+      "Where to find the model number, processor, RAM, storage size and whether the drive is an SSD or hard disk on Windows, Mac, Chromebook, Linux, phones and tablets.",
+    lede: "The model, memory and drive type decide how to wipe a device, whether an upgrade is worth it, and what it's worth to the next person. Here's where to look.",
+    card: "Model number, RAM, storage and SSD vs hard disk, on every common system, in a couple of minutes.",
+    body: `
+    <h2>If it won't turn on: read the label</h2>
+    <p>Laptops usually have a sticker or printed text on the underside (sometimes under the battery); desktops on the back or side of the case; phones and tablets in the SIM tray or on the box. Look for "Model", "MTM", "P/N" or "Type". Searching that model number plus "specs" usually finds the original memory, storage and drive type.</p>
+    <p>The serial number is on the same label. It identifies your exact unit, so you don't need to post it anywhere public.</p>
+
+    <h2>Windows 10 and 11</h2>
+    <ul>
+      <li><strong>Model, processor and memory:</strong> Settings &gt; System &gt; About. "Installed RAM" is the memory; the model name is shown at the top on most machines.</li>
+      <li><strong>SSD or hard disk:</strong> open Task Manager (Ctrl + Shift + Esc), choose Performance, and select each Disk. The drive type (SSD or HDD) is shown under the graph.</li>
+      <li><strong>Storage size:</strong> Settings &gt; System &gt; Storage.</li>
+    </ul>
+
+    <h2>Mac</h2>
+    <ul>
+      <li><strong>Model, chip and memory:</strong> Apple menu &gt; About This Mac. On recent macOS versions, choose More Info for the full details.</li>
+      <li><strong>Drive type:</strong> every Mac with Apple silicon, and most Macs from the last several years, uses an SSD. To check, hold Option, open the Apple menu and choose System Information, then look under Storage for "Medium Type".</li>
+    </ul>
+
+    <h2>Chromebook</h2>
+    <ul>
+      <li><strong>Model and update date:</strong> Settings &gt; About ChromeOS &gt; Additional details. The "Update schedule" line tells you how long it keeps getting security updates.</li>
+      <li><strong>Drive type:</strong> Chromebooks use flash storage, so treat them as SSD devices. A Powerwash is the right way to erase them.</li>
+    </ul>
+
+    <h2>Linux</h2>
+    <p>In a terminal:</p>
+    <ul>
+      <li><code>lsblk -d -o NAME,SIZE,ROTA,MODEL</code> lists each drive. <code>ROTA</code> 1 means a spinning hard disk, 0 means an SSD or NVMe drive.</li>
+      <li><code>free -h</code> shows memory and <code>lscpu</code> shows the processor.</li>
+      <li><code>cat /sys/class/dmi/id/product_name</code> usually shows the model.</li>
+    </ul>
+
+    <h2>Phones and tablets</h2>
+    <ul>
+      <li><strong>iPhone and iPad:</strong> Settings &gt; General &gt; About shows the model name and capacity.</li>
+      <li><strong>Android:</strong> Settings &gt; About phone (or About tablet). Menu names vary by maker.</li>
+      <li>Phones and tablets all use flash storage; a factory reset after signing out is the right way to erase them.</li>
+    </ul>
+
+    <h2>What to do with it</h2>
+    <ul>
+      <li>Knowing the drive type? Use the <a href="/resources/wipe-method-picker">data-wipe method picker</a> for the right erase steps.</li>
+      <li>Thinking about an upgrade? The <a href="/resources/upgrade-ram-and-ssd">RAM and SSD guide</a> explains what to buy.</li>
+      <li>Donating? Put the model, memory and storage in the description on the <a href="/#donate">donation form</a>. It helps us plan where the machine can go.</li>
+    </ul>`,
+  },
+  {
     slug: "repair-or-replace-old-computer",
     crumb: "Repair or replace",
     title: "Should you repair, upgrade or replace an old computer?",
