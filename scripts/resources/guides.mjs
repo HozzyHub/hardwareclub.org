@@ -102,7 +102,7 @@ export const guides = [
     body: `
     <h2>Before you hand it over</h2>
     <ol>
-      <li><strong>Back up</strong> anything you want to keep.</li>
+      <li><strong>Back up</strong> anything you want to keep, including two-factor codes. See the <a href="/resources/back-up-before-you-donate">backup guide</a>.</li>
       <li><strong>Sign out and wipe.</strong> Follow the <a href="/resources/wipe-a-drive-before-donating">wipe guide</a>, or tell us you want your drive back.</li>
       <li><strong>Find the charger.</strong> A working power adapter is often the difference between a usable laptop and a parts machine. Check you have the right one for that model.</li>
       <li><strong>Test it.</strong> Does it power on? Does it hold a charge? Does the screen, keyboard, trackpad and Wi-Fi work? Jot down what doesn't.</li>
