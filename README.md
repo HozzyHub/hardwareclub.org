@@ -132,7 +132,7 @@ Before the first real deploy is useful in production:
 
 ## Project layout
 
-- `public/` — static HTML/CSS/JS pages, fonts, and images.
+- `public/` — static HTML/CSS/JS pages and images.
 - `src/` — the Worker: routing (`index.ts`), the submission handler
   (`submit.ts`, `body.ts`, `validate.ts`), Turnstile verification
   (`turnstile.ts`), email (`email.ts`), failure alerts (`failure-alert.ts`),

@@ -11,7 +11,7 @@ async function listHtmlFiles(dir) {
   for (const entry of entries) {
     const full = path.join(dir, entry.name);
     if (entry.isDirectory()) {
-      if (entry.name !== "fonts" && entry.name !== "downloads") files.push(...(await listHtmlFiles(full)));
+      if (entry.name !== "downloads") files.push(...(await listHtmlFiles(full)));
     } else if (entry.name.endsWith(".html")) {
       files.push(full);
     }
