@@ -12,7 +12,7 @@ export const guides = [
     card: "What really erases data on hard drives, SSDs, phones and tablets, and when to destroy a drive instead.",
     body: `
     <h2>Step 0: back up what you want to keep</h2>
-    <p>Wiping is permanent. Copy photos, documents, browser bookmarks and password-manager exports to an external drive or cloud account first, and check the copy opens.</p>
+    <p>Wiping is permanent. Copy photos, documents, browser bookmarks and password-manager exports to an external drive or cloud account first, and check the copy opens. The <a href="/resources/back-up-before-you-donate">backup guide</a> has a full checklist, including two-factor codes.</p>
 
     <h2>Step 1: sign out and deauthorize</h2>
     <ul>
@@ -40,6 +40,54 @@ export const guides = [
     <h2>Prefer to keep the drive?</h2>
     <p>If you'd rather not trust any software, take the drive out and keep it. Hardware Club will take the machine without it, and you can say so on the donation form. Tell us you want your drive back and we'll hand it over at drop-off.</p>
     <p>Not sure which steps apply to your device? Use the <a href="/resources/wipe-method-picker">data-wipe method picker</a>.</p>`,
+  },
+  {
+    slug: "back-up-before-you-donate",
+    crumb: "Back up first",
+    title: "Back up an old computer or phone before donating",
+    h1: "Back up an old computer or phone before you let it go",
+    level: "Beginner",
+    description:
+      "What to copy off an old laptop, desktop or phone before wiping it (photos, documents, passwords, two-factor codes, messages), where to put it, and how to check the copy works.",
+    lede: "Wiping is permanent. Fifteen minutes spent checking what's on the device, and that your copy opens, saves a lot of regret.",
+    card: "What to copy off before a wipe: photos, files, passwords, 2FA codes and messages, and how to check the copy.",
+    body: `
+    <h2>Make a list of what's on it</h2>
+    <p>Most people remember photos and documents and forget the rest. Go through this list before you start:</p>
+    <ul>
+      <li><strong>Photos and videos</strong>, including any outside the main Pictures folder (Downloads, Desktop, phone camera roll).</li>
+      <li><strong>Documents</strong>: Desktop, Documents and Downloads folders, and anything saved inside an app's own folder.</li>
+      <li><strong>Passwords</strong> saved in the browser or a password manager.</li>
+      <li><strong>Two-factor authentication codes.</strong> If an authenticator app on an old phone is the only place your codes live, move them to the new phone and check you can sign in <em>before</em> you reset the old one. Losing them can lock you out of accounts.</li>
+      <li><strong>Messages</strong> you want to keep (texts, chat apps), and <strong>browser bookmarks</strong>.</li>
+      <li><strong>Licence keys</strong> for paid software, and anything you need to deauthorize (music libraries, design software, games).</li>
+      <li><strong>Email</strong> stored only on the device (an old Outlook data file, for example) rather than on the mail server.</li>
+    </ul>
+
+    <h2>Pick where the copy goes</h2>
+    <ul>
+      <li><strong>An external drive or USB stick</strong> is simple and needs no account. Copy the folders across, and keep the drive somewhere safe.</li>
+      <li><strong>A cloud account</strong> you already use (iCloud, Google, OneDrive) works well for phones and for photos. Check that the backup finished and that you have room for it.</li>
+      <li><strong>Moving to a new device?</strong> The built-in transfer tools (Quick Start on iPhone, Migration Assistant on Mac, the Android setup copy step, or signing in with the same account on Windows) carry over much of this list for you.</li>
+    </ul>
+    <p>For anything irreplaceable, keep two copies in different places, for example an external drive and a cloud account.</p>
+
+    <h2>Phones: a few extra steps</h2>
+    <ul>
+      <li><strong>iPhone and iPad:</strong> back up to iCloud (Settings &gt; your name &gt; iCloud &gt; iCloud Backup) or to a computer.</li>
+      <li><strong>Android:</strong> Settings &gt; Google &gt; Backup (menu names vary by maker). Photos back up separately through your photos app.</li>
+      <li>Chat apps often keep their own backup setting (WhatsApp and Signal, for example). Check it inside the app.</li>
+    </ul>
+
+    <h2>Check the copy before you wipe</h2>
+    <ol>
+      <li>Open a few photos and documents <em>from the copy</em>, not from the old device.</li>
+      <li>On the new device, sign in to your password manager and one account that uses two-factor authentication.</li>
+      <li>Only then follow the <a href="/resources/wipe-a-drive-before-donating">wipe guide</a>, or the <a href="/resources/wipe-method-picker">wipe method picker</a> for your device.</li>
+    </ol>
+
+    <h2>Can't get it to turn on?</h2>
+    <p>The data is usually still on the drive. Take the drive out and keep it, or tell us on the <a href="/#donate">donation form</a> that you want your drive back. With an inexpensive USB adapter or enclosure, you can copy files off it later from another computer.</p>`,
   },
   {
     slug: "prepare-a-laptop-for-donation",
