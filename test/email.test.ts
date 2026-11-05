@@ -16,6 +16,8 @@ const submission: NormalizedSubmission = {
   consent: true,
 };
 
+const SUBMISSION_ID = "0b6f9a8e-6d3c-4f1e-9a51-3c2b7d8e9f10";
+
 function splitMessage(raw: string): { headers: string; body: string } {
   const separator = raw.search(/\r?\n\r?\n/);
   return {
@@ -31,7 +33,7 @@ function decodeBase64(text: string): string {
 
 describe("buildRawMessage", () => {
   it("addresses the notification to the configured recipient with the donor as Reply-To", () => {
-    const raw = buildRawMessage("maintainer@example.org", submission);
+    const raw = buildRawMessage("maintainer@example.org", submission, SUBMISSION_ID);
     const { headers } = splitMessage(raw);
 
     expect(headers).toMatch(/^To: <maintainer@example\.org>\r?$/m);
@@ -46,7 +48,7 @@ describe("buildRawMessage", () => {
       name: "x\r\nSubject: Action required\r\n\r\n<b>evil</b>",
       location: "Detroit\r\nBcc: victim@example.com",
     };
-    const raw = buildRawMessage("maintainer@example.org", hostile);
+    const raw = buildRawMessage("maintainer@example.org", hostile, SUBMISSION_ID);
     const { headers } = splitMessage(raw);
     const lines = headers.split(/\r?\n/);
 
@@ -58,7 +60,7 @@ describe("buildRawMessage", () => {
   });
 
   it("base64-encodes the plain-text body so non-ASCII donor text survives intact", () => {
-    const raw = buildRawMessage("maintainer@example.org", submission);
+    const raw = buildRawMessage("maintainer@example.org", submission, SUBMISSION_ID);
     const { headers, body } = splitMessage(raw);
 
     expect(headers).toMatch(/^Content-Type: text\/plain; charset=UTF-8\r?$/m);
@@ -67,6 +69,7 @@ describe("buildRawMessage", () => {
     expect(body.split(/\r?\n/).every((line) => line.length <= 76)).toBe(true);
 
     const decoded = decodeBase64(body);
+    expect(decoded.split("\n")[0]).toBe(`Submission ID: ${SUBMISSION_ID}`);
     expect(decoded).toContain("Name: Zoë Müller");
     expect(decoded).toContain("Categories: laptops, components");
     expect(decoded).toContain("Wants drive back: yes");

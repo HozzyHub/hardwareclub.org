@@ -54,9 +54,10 @@ its PNG bytes vary by platform).
 
 The Worker runs a monthly Cron Trigger at 00:00 UTC on the first day of each
 month. It deletes D1 submissions older than 12 months and logs only the number
-of rows deleted. After a handoff is complete, look up the submission's `id` by
-the donor's email address (replace `DONOR_EMAIL`), since the notification email
-does not include it:
+of rows deleted. After a handoff is complete, delete that donor's row. The
+notification email starts with a `Submission ID:` line; notifications sent
+before that line existed don't have it, so for those look up the `id` by the
+donor's email address (replace `DONOR_EMAIL`):
 
 ```sh
 npx wrangler d1 execute hardwareclub-submissions --remote --command "SELECT id, created_at, name, email FROM submissions WHERE lower(email) = lower('DONOR_EMAIL');"
