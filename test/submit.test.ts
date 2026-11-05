@@ -333,6 +333,7 @@ describe("POST /api/submit", () => {
     expect(row.status).toBe("new");
 
     expect(notifier.send).toHaveBeenCalledTimes(1);
+    expect(vi.mocked(notifier.send).mock.calls[0]![2]).toBe(row.id);
     expect(failureAlert.send).not.toHaveBeenCalled();
   });
 

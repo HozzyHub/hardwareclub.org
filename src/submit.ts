@@ -162,7 +162,7 @@ export async function handleSubmit(request: Request, env: Env, ctx: Pick<Executi
   }
 
   try {
-    await notifier.send(env, data);
+    await notifier.send(env, data, id);
   } catch (err) {
     console.error("Failed to send donation notification email", err);
     reportFailure(env, ctx, "notify");
