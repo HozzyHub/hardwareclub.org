@@ -216,6 +216,64 @@ describe("POST /api/submit", () => {
     expect(await submissionRows()).toHaveLength(0);
   });
 
+  it.each([
+    ["quantity", "lots"],
+    ["powers_on", "maybe"],
+    ["handoff", "courier"],
+  ])("rejects an unknown %s value", async (field, value) => {
+    const response = await SELF.fetch("https://hardwareclub.org/api/submit", {
+      method: "POST",
+      headers: { "content-type": "application/x-www-form-urlencoded", accept: "application/json" },
+      body: buildFormBody({ [field]: value }).toString(),
+    });
+
+    expect(response.status).toBe(400);
+    const data = (await response.json()) as { errors: Record<string, string> };
+    expect(Object.keys(data.errors)).toEqual([field]);
+    expect(await submissionRows()).toHaveLength(0);
+  });
+
+  it.each(["{not json", "null", "[]", '"a string"'])("answers a JSON body of %s with a 400 instead of throwing", async (raw) => {
+    const response = await SELF.fetch("https://hardwareclub.org/api/submit", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: raw,
+    });
+
+    expect(response.status).toBe(400);
+    const data = (await response.json()) as { ok: boolean; errors: Record<string, string> };
+    expect(data.ok).toBe(false);
+    expect(await submissionRows()).toHaveLength(0);
+  });
+
+  it("stores repeated categories once, in the order first given", async () => {
+    const response = await SELF.fetch("https://hardwareclub.org/api/submit", {
+      method: "POST",
+      headers: { "content-type": "application/x-www-form-urlencoded", accept: "application/json" },
+      body: buildFormBody({}, ["servers", "laptops", "servers"]).toString(),
+    });
+
+    expect(response.status).toBe(200);
+    const rows = await submissionRows();
+    expect(JSON.parse(rows[0]!.categories as string)).toEqual(["servers", "laptops"]);
+  });
+
+  it.each([true, "yes", "on", 1])("reads drive_back %j in a JSON body as yes", async (driveBack) => {
+    const response = await SELF.fetch("https://hardwareclub.org/api/submit", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        ...VALID_FIELDS,
+        categories: ["laptops"],
+        consent: true,
+        drive_back: driveBack,
+      }),
+    });
+
+    expect(response.status).toBe(200);
+    expect((await submissionRows())[0]!.drive_back).toBe(1);
+  });
+
   it("rejects a malformed email address", async () => {
     const body = buildFormBody({ email: "not-an-email" });
 
