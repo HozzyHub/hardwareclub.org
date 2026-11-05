@@ -24,7 +24,7 @@
     "html-validate": "^11.16.0",
     "mimetext": "^3.0.28",
     "typescript": "^7.0.2",
-    "vitest": "^4.1.11",
+    "vitest": "^4.1.12",
     "wrangler": "^4.136.3"
   },
   "allowScripts": {
