@@ -91,7 +91,21 @@ async function main() {
         continue;
       }
 
-      const [pathname, fragment] = link.split("#");
+      if (!link.startsWith("/")) {
+        // Relative links resolve differently under clean URLs ("/resources"
+        // vs "/resources/"), so require root-relative paths.
+        errors.push(`${path.relative(root, file)}: relative link "${link}" (use a root-relative path)`);
+        continue;
+      }
+
+      const [beforeFragment, fragment] = link.split("#");
+      const pathname = beforeFragment.split("?")[0];
+
+      if (/\.html$/.test(pathname)) {
+        // Assets use html_handling "auto-trailing-slash": /x.html 307s to /x.
+        errors.push(`${path.relative(root, file)}: link "${link}" ends in .html (use the clean URL)`);
+        continue;
+      }
 
       const targetFile = pathname ? await resolveInternalPath(pathname) : file;
       if (!targetFile) {
