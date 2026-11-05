@@ -167,7 +167,7 @@
 
   function wipe(v) {
     var result;
-    if (v.broken) {
+    if (v.wbroken) {
       result = {
         title: "Remove and keep the drive, or destroy it",
         text: "If the device won't power on, software can't erase it. Take the drive out and keep it, or destroy it physically. Tell us on the donation form and we can take the rest without the drive.",

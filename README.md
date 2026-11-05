@@ -140,6 +140,8 @@ Before the first real deploy is useful in production:
   `security.ts`, `site.ts`).
 - `migrations/` — D1 schema migrations.
 - `test/` — Vitest tests running against the real Workers runtime.
-- `scripts/` — `build-og.mjs` (OG image, part of `npm run build`) and
-  `check-links.mjs` (part of `npm run check`). `build-favicon-ico.mjs` is a
-  manual one-off, not run automatically.
+- `scripts/` — `build-resources.mjs` and `build-og.mjs` (part of
+  `npm run build`); `check-links.mjs` and `check-tools.mjs` (part of
+  `npm run check`; the latter runs `public/tools.js` against the generated
+  tool pages with a stub DOM). `build-favicon-ico.mjs` is a manual one-off,
+  not run automatically.
