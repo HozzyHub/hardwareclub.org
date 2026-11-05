@@ -22,8 +22,34 @@ export const HANDOFF_VALUES = ["drop-off", "figure-it-out"] as const;
 export type Handoff = (typeof HANDOFF_VALUES)[number];
 
 // Deliberately loose, but rejects characters that are special in RFC 5322
-// address headers so the notification's Reply-To can't be malformed.
-const EMAIL_RE = /^[^\s@<>()[\]\\,;:"]+@[^\s@<>()[\]\\,;:"]+\.[^\s@<>()[\]\\,;:"]+$/;
+// address headers, and control characters, so the notification's Reply-To
+// can't be malformed.
+const EMAIL_RE = /^[^\s\p{Cc}@<>()[\]\\,;:"]+@[^\s\p{Cc}@<>()[\]\\,;:"]+\.[^\s\p{Cc}@<>()[\]\\,;:"]+$/u;
+
+// Bidi embedding/override/isolate controls can make a name or location in the
+// notification email read differently from what was submitted.
+const BIDI_CONTROLS = /[\u202A-\u202E\u2066-\u2069]/g;
+
+/** One-line fields: any control or line/paragraph separator becomes a space, runs of whitespace collapse. */
+function singleLine(value: string, maxLength: number): string {
+  return value
+    .replace(BIDI_CONTROLS, "")
+    .replace(/[\p{Cc}\p{Zl}\p{Zp}]/gu, " ")
+    .replace(/\s+/g, " ")
+    .trim()
+    .slice(0, maxLength);
+}
+
+/** Free text: keeps newlines and tabs, normalizes CRLF, drops other control characters. */
+function multiLine(value: string, maxLength: number): string {
+  return value
+    .replace(/\r\n?/g, "\n")
+    .replace(BIDI_CONTROLS, "")
+    .replace(/[^\P{Cc}\n\t]/gu, "")
+    .trim()
+    .slice(0, maxLength);
+}
+
 const MAX_CATEGORIES = 8;
 
 export interface NormalizedSubmission {
@@ -53,7 +79,7 @@ function isOneOf<T extends string>(values: readonly T[], value: string): value i
 export function validateSubmission(input: RawSubmission): ValidationResult {
   const errors: ValidationErrors = {};
 
-  const name = input.name.trim().slice(0, 120);
+  const name = singleLine(input.name, 120);
   if (!name) errors.name = "Please enter your name.";
 
   const email = input.email.trim().slice(0, 200);
@@ -63,10 +89,10 @@ export function validateSubmission(input: RawSubmission): ValidationResult {
     errors.email = "That doesn't look like a valid email.";
   }
 
-  const phoneTrimmed = input.phone.trim().slice(0, 40);
+  const phoneTrimmed = singleLine(input.phone, 40);
   const phone = phoneTrimmed || null;
 
-  const location = input.location.trim().slice(0, 120);
+  const location = singleLine(input.location, 120);
   if (!location) errors.location = "Please enter a city or ZIP.";
 
   let categories: Category[] = [];
@@ -84,7 +110,7 @@ export function validateSubmission(input: RawSubmission): ValidationResult {
     }
   }
 
-  const description = input.description.trim().slice(0, 2000);
+  const description = multiLine(input.description, 2000);
   if (!description) errors.description = "Please tell us a bit about what you have.";
 
   const quantity = input.quantity.trim();
