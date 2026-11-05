@@ -7,10 +7,11 @@ const root = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const fontsDir = path.join(root, "public", "fonts");
 const outFile = path.join(root, "public", "og.png");
 
-const BG = "#0A1628";
-const INK = "#EEF2F7";
-const MUTED = "#A3AFC2";
-const ACCENT = "#F5B700";
+// Keep in step with the --bg/--ink/--muted/--accent tokens in public/styles.css.
+const BG = "#07050C";
+const INK = "#E6DDFF";
+const MUTED = "#A99CC9";
+const ACCENT = "#C084FC";
 
 const MARK_PATH = `<path d="M18 11V6M24 11V6M30 11V6M18 42V37M24 42V37M30 42V37M11 18H6M11 24H6M11 30H6M42 18H37M42 24H37M42 30H37"/><path d="M30.5 20.3A7.5 7.5 0 1 0 31.1 26.6"/><path d="M27.7 27.9L31.2 26.4L32.7 29.9"/>`;
 
