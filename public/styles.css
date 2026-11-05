@@ -558,6 +558,11 @@ a:focus-visible {
   color: var(--ink);
 }
 
+.form-note {
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--ink);
+}
 .form-status[hidden] {
   display: none;
 }

@@ -98,6 +98,11 @@ describe("GET /", () => {
     expect(html).toContain('data-sitekey="test-suite-sitekey"');
   });
 
+  it("tells visitors without JavaScript how to reach us, since Turnstile needs it", async () => {
+    const html = await (await SELF.fetch("https://hardwareclub.org/")).text();
+    expect(html).toMatch(/<noscript>[\s\S]*mailto:hello@hardwareclub\.org[\s\S]*<\/noscript>/);
+  });
+
   it("serves the page without cache validators so a site key change is never masked by a 304", async () => {
     const response = await SELF.fetch("https://hardwareclub.org/");
     expect(response.status).toBe(200);
