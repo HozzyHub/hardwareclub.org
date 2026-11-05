@@ -40,6 +40,13 @@ export default {
       response = await env.ASSETS.fetch(request);
     }
 
+    if (url.pathname.startsWith("/api/")) {
+      // API responses are per-request (health state, validation errors that
+      // echo the donor's input): never let a browser or proxy cache them.
+      response = new Response(response.body, response);
+      response.headers.set("Cache-Control", "no-store");
+    }
+
     return withSecurityHeaders(response, hostname);
   },
   async scheduled(controller, env): Promise<void> {

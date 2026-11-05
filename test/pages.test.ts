@@ -136,6 +136,28 @@ describe("isolation headers", () => {
   });
 });
 
+describe("API caching", () => {
+  it("marks /api/health no-store", async () => {
+    const response = await SELF.fetch("https://hardwareclub.org/api/health");
+    expect(response.headers.get("cache-control")).toBe("no-store");
+  });
+
+  it("marks /api/submit responses no-store", async () => {
+    const response = await SELF.fetch("https://hardwareclub.org/api/submit", {
+      method: "POST",
+      headers: { "content-type": "application/json", accept: "application/json" },
+      body: "{",
+    });
+    expect(response.status).toBe(400);
+    expect(response.headers.get("cache-control")).toBe("no-store");
+  });
+
+  it("leaves static pages' caching alone", async () => {
+    const response = await SELF.fetch("https://hardwareclub.org/privacy");
+    expect(response.headers.get("cache-control")).not.toBe("no-store");
+  });
+});
+
 describe("non-POST /api/submit", () => {
   it.each(["GET", "PUT", "DELETE"])("answers %s with 405 and Allow: POST", async (method) => {
     const response = await SELF.fetch("https://hardwareclub.org/api/submit", { method });
