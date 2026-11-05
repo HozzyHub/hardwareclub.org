@@ -4,6 +4,7 @@ import { describe, expect, it } from "vitest";
 const PAGES = [
   "/resources",
   "/resources/wipe-a-drive-before-donating",
+  "/resources/back-up-before-you-donate",
   "/resources/prepare-a-laptop-for-donation",
   "/resources/find-your-computer-specs",
   "/resources/repair-or-replace-old-computer",
